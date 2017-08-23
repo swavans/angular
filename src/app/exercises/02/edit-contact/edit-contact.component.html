@@ -3,21 +3,25 @@
 <!-- TODO: display an error message here if the form is not valid -->
 
 <!-- TODO: bind form inputs to the model -->
-<form>
+<div #error *ngIf="!isValid()&&warning" class="alert alert-danger" role="alert">
+    <strong>Oh snap!</strong> Change a few things up and try submitting again.
+  </div>
+<form (keyup.Enter)="save()" (change)="reset()">
+
   <div class="form-group">
     <label for="firstName">First Name</label>
-    <input type="text" class="form-control" id="firstName">
+    <input #name   [value]="contact.firstName" (input)="contact.firstName = name.value"  type="text" class="form-control" id="firstName">
   </div>
   <div class="form-group">
     <label for="lastName">Last Name</label>
-    <input type="text" class="form-control" id="lastName">
+    <input #lastname [value]="contact.lastName" (input)="contact.lastName = lastname.value"  type="text" class="form-control" id="lastName">
   </div>
 </form>
 
 <!-- TODO: handle button clicks and enable/disable them -->
-<button type="button" class="btn btn-primary">Save</button>
-<button type="button" class="btn btn-secondary">Clear</button>
-
+<button (click)="save()" type="button" [disabled]="!isValid()" class="btn btn-primary">Save</button>
+<button (click)="clear()" type="button" class="btn btn-secondary">Clear</button>
+<button (click)="random()" type="button" class="btn btn-danger">Random</button>
 <hr>
 
 <pre>Contacts: {{ contacts | json }}</pre>
