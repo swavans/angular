@@ -1,0 +1,480 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Data Flow</h1>
+  </section>
+
+  <section>
+    <h2>State management is <mark>hard</mark></h2>
+    <br>
+    <p>... but, there is nothing in the official Angular documentation (yet)</p>
+  </section>
+
+  <section>
+    <h2>Dataflow issues</h2>
+    <h4>examples</h4>
+    <br><br>
+    <h3>2-way data binding</h3>
+    <h3>Shared State</h3>
+  </section>
+
+  <section>
+    <h2>Data flow is <mark>not</mark> change detection</h2>
+    <br>
+    <p>It might be a bit confusing though</p>
+  </section>
+
+  <section>
+    <h2><mark>Unidirectional</mark><br> data flow</h2>
+    <img src="/img/unidirectional.png" style="width: 60%">
+  </section>
+
+  <section>
+    <h2>Three things</h2>
+    <br>
+    <ol>
+      <li>Services and DI</li>
+      <li>Observable Services</li>
+      <li>Store-based architectures</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Services and DI</h2>
+    <h4>The default choice</h4>
+    <br>
+    <h4>Good</h4>
+    <ul class="nobullet">
+      <li>Simple, but powerful</li>
+      <li>Everybody knows them</li>
+    </ul>
+    <br><br>
+    <h4>Bad</h4>
+    <ul class="nobullet">
+      <li>Might not help with shared state</li>
+      <li>Can easily inject anywhere</li>
+      <li>No centralized state management</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Observable services</h2>
+    <h4>Just add observable shared data</h4>
+    <br>
+    <p>Just expose your data as observables</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Injectable()
+export class ContactService {
+
+  private _contacts$ = new BehaviorSubject<Contact[]>([]);
+
+  get contacts$(): Observable<Contact[]> {
+    return this._contacts$.asObservable();
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Observable services</h2>
+    <br>
+    <h4>Good</h4>
+    <ul class="nobullet">
+      <li>Data is pushed to the components</li>
+      <li>Help with shared state</li>
+      <li>Optimize change detection with <code>OnPush</code> strategy</li>
+    </ul>
+    <br><br>
+    <h4>Bad</h4>
+    <ul class="nobullet">
+      <li>Can easily inject anywhere</li>
+      <li>No centralized state management</li>
+    </ul>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>DEMO</h1>
+    <br>
+    <h2>Let's fix <mark>layering</mark></h2>
+    <h2>and make an</h2>
+    <h2><mark>Observable Service</mark></h2>
+  </section>
+
+  <section>
+    <h2>Flux</h2>
+    <h4>Better state management</h4>
+    <br>
+    <ul class="nobullet">
+      <li><code>Stores</code> → several stores that split app state</li>
+      <li><code>Components</code> → listening for events on the store, trigger actions</li>
+      <li><code>Dispatcher</code> → a 'global event bus'</li>
+      <li><code>Actions</code> → describe state changes</li>
+    </ul>
+    <br><br>
+    <a href="https://www.youtube.com/watch?v=nYkdrAPrdcw">Rethinking Web Development in Facebook</a>
+  </section>
+
+  <section>
+    <h2>Flux</h2>
+    <img src="/img/flux.jpg" style="width: 75%" />
+  </section>
+
+  <section>
+    <h2>Flux</h2>
+    <br>
+    <h4>Good</h4>
+    <ul class="nobullet">
+      <li>Predictible one-way data flow</li>
+      <li>Simple model with global event bus</li>
+      <li>Just one dispatch at a time</li>
+    </ul>
+    <br><br>
+    <h4>Bad</h4>
+    <ul class="nobullet">
+      <li>Hard to synchronize multiple stores</li>
+      <li>Not a framework, many variations</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Redux</h2>
+    <h4>Simplified Flux</h4>
+    <br>
+    <p>(Has nothing to do with React, just happens to work with it fine)</p>
+    <br>
+    <ul class="nobullet">
+      <li><code>Store</code> → contains single immutable state</li>
+      <li><code>Components</code> → emit actions to modify state</li>
+      <li><code>Actions</code> → describe state changes</li>
+      <li><code>Reducers</code> → functions that transform state into a new state</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Redux</h2>
+    <img src="/img/redux.jpg" style="width: 75%" />
+  </section>
+
+  <section>
+    <h2>Redux</h2>
+    <br>
+    <h4>Good</h4>
+    <ul class="nobullet">
+      <li>Single state</li>
+      <li>Simple testable reducer functions</li>
+      <li>Serializable state, nice dev tools</li>
+    </ul>
+    <br><br>
+    <h4>Bad</h4>
+    <ul class="nobullet">
+      <li>Single state</li>
+      <li>Configuration might not be simple</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>A word on <mark>Immutability</mark></h2>
+    <p>Making things immutable</p>
+    <div data-markdown>
+      <script type="text/template">
+```javascript
+// immutable.js - can't use in Amadeus :(
+const map = Immutable.Map({a:1, b:2, c:3});
+
+// freeze - not a deep-freeze :(
+const frozen = Object.freeze({a:1, b:2, c:3});
+```
+      </script>
+    </div>
+    <p>Creating new instances</p>
+    <div data-markdown>
+      <script type="text/template">
+```javascript
+const newOne = Object.assign({}, oldOne, {a: newValue});
+const newOne = {...oldOne, a: newValue};
+
+const newOne = Object.assign({}, oldOne, {data: [...newValue]});
+const newOne = {...oldOne, data: [...newValue]};
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>ngrx-platform</h2>
+    <h4>Reactive libraries for angular</h4>
+    <br>
+    <ul class="nobullet">
+      <li><code>@ngrx/store</code></li>
+      <li><code>@ngrx/store-devtools</code></li>
+      <li><code>@ngrx/router-store</code></li>
+      <li><code>@ngrx/effects</code></li>
+      <li><code>@ngrx/db</code></li>
+    </ul>
+    <br><br>
+    <a href="https://github.com/ngrx/platform">GitHub repository</a>
+  </section>
+
+  <section>
+    <h2>@ngrx/store</h2>
+    <h4>Redux + RxJs</h4>
+    <br>
+    <p>Let's make a single observable store!</p>
+    <br>
+    <ul>
+      <li>Containers dispatch actions</li>
+      <li>Store observes actions</li>
+      <li>Store is an observable of state</li>
+      <li>Use selectors and NgRx operators</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>@ngrx/store</h2>
+    <h4>Setup</h4>
+    <br>
+    <p>Configure effects and dev tools, create a store from reducers</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@NgModule({
+imports: [
+  StoreModule.forRoot(reducers),
+  StoreRouterConnectingModule,
+  StoreDevtoolsModule.instrument(),
+  EffectsModule.forRoot([ContactEffects])
+  }),
+})
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>@ngrx/store</h2>
+    <h4>Create store</h4>
+    <p>Each reducer creates a part of the store</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+// contacts.ts
+export interface State {
+  contacts: Contact[];
+  page: number;
+}
+
+export const reducer: (state: State, action: Action) => State
+  ```
+      </script>
+    </div>
+    <p>Combine reducers to create a store</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import * as fromContacts from './contacts';
+
+export interface State {
+  contacts: fromContacts.State;
+}
+
+export const reducers: ActionReducerMap<State> = {
+  contacts: fromContacts.reducer
+};
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>@ngrx/store</h2>
+    <h4>Reducers</h4>
+    <br>
+    <p>Handle actions in reducers and return a new state</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+export function reducer(state = initialState, action: contact.Actions): State {
+  switch (action.type) {
+
+    case contact.DELETE_CONTACT: {
+      const filtered = state.contacts.filter(contact => contact.id !== action.payload);
+      return {...state, contacts: [...filtered]};
+    }
+
+    default: {
+      return state;
+    }
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>@ngrx/store</h2>
+    <h4>Selectors</h4>
+    <p>Treat states as database tables and write queries</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+// contacts.ts
+export interface State {
+  contacts: Contact[];
+  page: number;
+}
+
+export const getPage = (state: State) => state.page;
+```
+      </script>
+    </div>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+// index.ts
+export interface State {
+  contacts: fromContacts.State;
+}
+
+const getContactState = createFeatureSelector<fromContacts.State>('contacts');
+export const getPage = createSelector(getContactState, fromContacts.getPage);
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>@ngrx/store</h2>
+    <h4>Inject state</h4>
+    <br>
+    <p>... and slice it with selectors you've created</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({/*...*/})
+export class ContactPageComponent {
+
+  contacts$: Observable<Contact[]>;
+  page$: Observable<number>;
+
+  constructor(private store: Store<fromRoot.State>) {
+    this.contacts$ = store.select(fromRoot.getContacts);
+    this.page$ = store.select(fromRoot.getPage);
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>@ngrx/store</h2>
+    <h4>Actions</h4>
+    <p>Create actions</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+export class DeleteAction implements Action {
+  readonly type = DELETE;
+
+  constructor(public payload: string) {}
+}
+```
+      </script>
+    </div>
+    <p>And dispatch them</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({/*...*/})
+export class ContactPageComponent {
+
+  constructor(private store: Store<fromRoot.State>) {}
+
+  onRemove(id: string) {
+    this.store.dispatch(new contacts.DeleteAction(id));
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>@ngrx/effects</h2>
+    <h4>Asynchronous actions</h4>
+    <br>
+    <p>Define trigger action and resulting actions</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+export class DeleteAction implements Action {
+  readonly type = DELETE;
+  constructor(public id: string) {}
+}
+
+export class DeleteCompleteAction implements Action {
+  readonly type = DELETE_COMPLETE;
+}
+
+export class DeleteFailedAction implements Action {
+  readonly type = DELETE_FAILED;
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>@ngrx/effects</h2>
+    <h4>Implement effects</h4>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Injectable()
+export class ContactEffects {
+
+@Effect()
+delete$: Observable<Action> = this.actions$
+  .ofType(contact.DELETE)
+  .map(toPayload)
+  .switchMap(id => {
+    return this.service.remove(id)
+      .map(() => new contact.DeleteCompleteAction())
+      .catch(() => of(new contact.DeleteFailedAction()));
+  });
+
+  constructor(private actions$: Actions, private service: ContactService) {}
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 16</h1>
+    <h3>ngrx-platform</h3>
+    <br>
+    <p>Make the contact pagination work</p>
+    <br>
+    <h1 timer="30"></h1>
+  </section>
+
+  <section data-slide-type="pink">
+    <h2>Which one to choose?</h2>
+    <h4>Instead of takeaways</h4>
+    <br>
+    <ul>
+      <li>Always start with simple Services and DI</li>
+      <li>Push state as high as possible in the component tree</li>
+      <li>You'll know when you need state management :)</li>
+      <li>Know what you're doing</li>
+      <li>Embrace refactoring!</li>
+    </ul>
+  </section>
+
+</section>

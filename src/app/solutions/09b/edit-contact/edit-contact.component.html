@@ -1,0 +1,39 @@
+<h4>Add new contact</h4>
+
+<!-- TODO: add reactive form validation using form groups and named controls. See steps in readme file -->
+<form [formGroup]="form" novalidate>
+  <div class="form-group"
+       ex-start
+       [class.has-danger]="!form.get('firstName').valid"
+       ex-end>
+    <label class="form-control-label" for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName"
+           ex-start
+           formControlName="firstName"
+           ex-end
+           (keyup.Enter)="save()">
+    <!-- ex-start -->
+    <div *ngIf="!form.get('firstName').valid" class="form-control-feedback">First name is required</div>
+    <!-- ex-end -->
+  </div>
+  <div class="form-group"
+       ex-start
+       [class.has-danger]="!form.get('lastName').valid"
+       ex-end>
+    <label class="form-control-label" for="lastName">Last Name</label>
+    <input type="text" class="form-control" id="lastName"
+           ex-start
+           formControlName="lastName"
+           ex-end
+           (keyup.Enter)="save()">
+    <!-- ex-start -->
+    <div *ngIf="!form.get('lastName').valid" class="form-control-feedback">Last name is required</div>
+    <!-- ex-end -->
+  </div>
+</form>
+
+<button type="button" class="btn btn-primary" (click)="save()"
+        ex-start
+        [disabled]="!form.valid"
+        ex-end>Save</button>
+<button type="button" class="btn btn-secondary" (click)="clear()">Clear</button>

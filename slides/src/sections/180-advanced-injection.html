@@ -1,0 +1,254 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Advanced Injection</h1>
+  </section>
+
+  <section>
+    <h2>Injection in a <mark>nutshell</mark></h2>
+    <br>
+    <ol>
+      <li>Use <mark>@Injectable</mark> decorator to make class injectable</li>
+      <li>Use <mark>providers: []</mark> to define where instances come from</li>
+      <li>Use <mark>Constructor</mark> to inject an instance</li>
+    </ol>
+
+    <br><br>
+
+    <p>Every component gets its "own" <mark>injector</mark></p>
+    <p>Consumer of an injectable service does not know how to create it</p>
+  </section>
+
+  <section>
+    <h2>Injection in a <mark>nutshell</mark></h2>
+    <h4>Example</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({
+  selector: 'app-edit-contact',
+  templateUrl: './edit-contact.component.html',
+  providers: [ContactService]
+})
+export class EditContactComponent {
+
+  constructor(private contactService: ContactService) {}
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-documentation-link="https://angular.io/docs/ts/latest/guide/dependency-injection.html">
+    <h2>The component <br>injector Tree</h2>
+    <p>Like the tree of components, one can say there is also a <mark>tree of injectors</mark></p>
+  </section>
+
+  <section>
+    <img src="/img/diagrams/Injector-Tree.svg" class="nobackground"/>
+  </section>
+
+  <section>
+    <h2>Injector Tree</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Search of an instance <mark>bubbles up</mark> until the <mark>root module</mark> if necessary</li>
+      <li>
+        <ul>
+          <li><mark>@Host()</mark> stops the upward search at the host component</li>
+          <li><mark>@Optional()</mark> allow angular to inject <mark>null</mark> instead of throwing errors</li>
+        </ul>
+      </li>
+      <br>
+      <li>Providers are configurable at <mark>any</mark> level</li>
+    </ul>
+  </section>
+
+  <section>
+    <img src="/img/diagrams/Bubbling-up.svg" class="nobackground"/>
+  </section>
+
+  <section>
+    <h2>Providers</h2>
+    <ul class="nobullet">
+      <li>They are used by an <mark>injector</mark></li>
+      <li>Multiple<mark>recipes</mark> for providers are available</li>
+      <li><mark>Token</mark> makes the link between what is needed in constructors and what the injector is going to use</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Providers</h2>
+    <h4>Recipes</h4>
+    <ul class="nobullet">
+      <li>useValue</li>
+      <li>useClass</li>
+      <li>useExisting</li>
+      <li>useFactory</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Use value</h2>
+    <ul class="nobullet">
+      <li>
+        <div data-markdown>
+          <script type="text/template">
+```typescript
+providers:[
+  {provide: MY_TOKEN, useValue: 3}
+  {provide: MyCar, useValue: aPeugeotCar}
+]
+```
+          </script>
+        </div>
+      </li>
+      <li>The value must be available <mark>right now</mark></li>
+      <li>Other providers create an instance <mark>on-demand</mark></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Injection Token</h2>
+    <br>
+    <p>In the previous example MY_TOKEN in an injection token</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { InjectionToken } from '@angular/core';
+
+export let MY_TOKEN = new InjectionToken<Number>('my.token');
+```
+      </script>
+    </div>
+    <br>
+    <p>Here is how to use it</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        constructor(@Inject(MY_TOKEN) injectedNumber: Number) {
+          this.carNumber = injectedNumber;
+        }
+        ```
+      </script>
+    </div>
+    <br>
+    <p>You can inject interface implementations this way</p>
+  </section>
+
+  <section>
+    <h2>Use class</h2>
+    <br>
+    <p>Create a new instance of the specified class</p>
+    <div data-markdown>
+      <script type="text/template">
+```javascript
+providers: [
+  {provide: MyColorClass, useClass: MyRedColor}
+]
+```
+      </script>
+    </div>
+    <br>
+    <p>This is the default behavior</p>
+  </section>
+
+  <section>
+    <h2>Use existing</h2>
+    <br>
+    <p>Injects the <mark>same</mark> instance as for MyRedColor</p>
+    <div data-markdown>
+      <script type="text/template">
+```javascript
+providers: [
+  MyRedColor,
+  {provide: MyColorClass, useExisting: MyRedColor}
+]
+```
+      </script>
+    </div>
+    <p>Note the differenc with <mark>useClass</mark></p>
+    <div data-markdown>
+      <script type="text/template">
+```javascript
+providers: [
+  MyColorClass,
+  {provide: MyColor, useClass: MyColorClass}
+]
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Use factory</h2>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+let myCarFactory = (date: Date, color: Color) =>
+  data < new Date('2017-03-02')
+    ? new Car('black')
+    : new Car(color);
+//...
+providers: [
+  {myCar: Car, useFactory: myCarFactory, deps: [MY_DATE_TOKEN, Color]}
+]
+```
+      </script>
+    </div>
+    <ul class="nobullet">
+      <li>The injector use the factory function to create the new instance</li>
+      <li><mark>deps</mark> are used to configure factory dependencies</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Child modules</h2>
+    <ul class="nobullet">
+      <li>All providers from child modules are <mark>aggregated</mark> in the root module</li>
+    </ul>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@NgModule({
+providers: [myService]
+})
+```
+      </script>
+    </div>
+    <img src="/img/diagrams/modules-and-providers.svg" class="nobackground" style="width: 70%"/>
+  </section>
+
+  <section>
+    <h2>Inject into a derived class</h2>
+    <ul class="nobullet">
+      <li>You <mark>must</mark> provide the injected service into the <mark>derived class</mark> to pass it to the <mark>constructor</mark> of the base class</li>
+      <li>
+        <div data-markdown>
+        <script type="text/template">
+```typescript
+constructor(color: Color) {
+  super(color);
+}
+```
+        </script>
+      </div>
+      </li>
+      <li><mark>Warning</mark>! Angular calls the <mark>derived</mark> class's <mark>ngOnInit before</mark> calling the <mark>base</mark> class's ngOnInit</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 14</h1>
+    <h3>Injector Tree</h3>
+    <br>
+    <p>Let's play with injection tokens and different injection levels</p>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 14</h1>
+    <h3>Injector Tree</h3>
+    <br>
+    <h1 timer="20"/>
+  </section>
+
+</section>

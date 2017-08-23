@@ -1,0 +1,228 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Angular-cli</h1>
+  </section>
+
+  <section>
+    <h2>angular-cli</h2>
+    <br/>
+    <p>Command line interface to</p>
+    <h4>Create, build, test, serve, lint</h4>
+    <br/>
+    <ul>
+      <li>Quite opinionated</li>
+      <li>Uses Karma, Protractor, Webpack</li>
+      <li>Knows about AoT and lazy loading</li>
+      <li><a href="https://github.com/angular/angular-cli">https://github.com/angular/angular-cli</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Cli tool</h2>
+    <br />
+    <p>You need to install it first</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```bash
+      npm install -g @angular/cli
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <img src="https://img.shields.io/npm/v/@angular/cli.svg?label=Angular CLI" class="nobackground" style="width: 100%"/>
+    <h4>Latest stable version</h4>
+  </section>
+
+
+  <section>
+    <h2>Create things</h2>
+    <center>
+      <table style="width: 75%">
+        <tr>
+          <td>New project</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng new project-name
+              ```
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Component</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng g component my-component
+              ```
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Directive</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng g directive my-directive
+              ```
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Pipe</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng g pipe my-pipe
+              ```
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Service</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng g service my-service
+              ```
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Class</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng g class my-class
+              ```
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Interface</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng g interface my-interface
+              ```
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Enum</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng g enum my-enum
+              ```
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Module</td>
+          <td>
+            <div data-markdown>
+              ```bash
+              ng g module my-module
+              ```
+            </div>
+          </td>
+        </tr>
+      </table>
+    </center>
+  </section>
+  <section>
+    <h2>Run, Test &amp; Build</h2>
+    <p>Run</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```bash
+      # by default serves at http://localhost:4200, but there are options
+      ng serve
+      ```
+      </script>
+    </div>
+    <p>Test</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```bash
+        # Run the unit test
+        ng test
+
+        # Run the e2e test
+        ng e2e
+        ```
+      </script>
+    </div>
+    <p>Build</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```bash
+      # Build the project either in --prod or --dev
+      ng build --prod
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Eject</h2>
+    <h4>To get hold of webpack config</h4>
+    <div data-markdown>
+      <script type="text/template">
+      ```bash
+      ng eject
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Angular-cli</h4>
+    <h2>Takeaways</h2>
+    <br/>
+    <ul class="nobullet">
+      <li>"Official" command line interface</li>
+      <li>Hassle-free project bootstrapping</li>
+      <li>Build, test and development tool</li>
+      <li>Built on top of Webpack</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Setup &amp; Run</h2>
+    <h4>Commands you'll need</h4>
+    <br/>
+    <ul class="nobullet">
+      <li><code>npm start</code> → starts the app on localhost:4200</li>
+      <li><code>npm test</code> → starts tests in tdd mode</li>
+      <li><code>ng g ...</code> → generate things with cli</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Now we can start with the <mark>exercises</mark>!</h2>
+    <h4>Let's go through the code</h4>
+  </section>
+
+  <section>
+    <h1>Exercise 01</h1>
+    <h3>Hello World</h3>
+    <p>Create a new simple component with a template</p>
+  </section>
+
+  <section>
+    <img src="/img/exercises/01.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 01</h1>
+    <h3>Hello World</h3>
+    <br>
+    <h1 timer="10"/>
+  </section>
+</section>

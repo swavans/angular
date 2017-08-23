@@ -1,0 +1,312 @@
+<section
+  data-documentation-link="https://angular.io/docs/ts/latest/guide/router.html"
+>
+  <section data-slide-type="blue">
+    <h1>Routing &amp; Navigation</h1>
+    <aside class="notes" data-markdown>
+      The Angular Router enables navigation from one view to the next as users perform application tasks.
+
+      Routing is difficult in the SPA world, when there are no more distinct HTML pages.
+
+      It's up to the developer to somehow define mappings:
+
+      * [URL → internal state]
+      * [internal state → URL]
+
+      In NG2 router helps to do that
+    </aside>
+  </section>
+
+  <section>
+    <h2>Routing</h2>
+    <h4>Ideas</h4>
+    <br>
+    <ul class="nobullet">
+      <li>We should identify application states</li>
+      <li>Have navigation API to switch between these states</li>
+      <li>Update the state when the URL changes</li>
+      <li>Update the URL when the state changes</li>
+    </ul>
+  </section>
+
+  <section>
+    <table width="100%" class="table-center">
+      <tr>
+        <td class="no-padding" width="45%"><h4><code style="background: none">/some/url/12</code></h4></td>
+        <td class="no-padding" width="15%"><h3>⟷</h3></td>
+        <td class="no-padding" width="40%">
+          <img
+            src="/img/diagrams/routing-state-1.svg"
+            class="nobackground"
+            style="height: 6em"
+          >
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3"><br><hr><br></td>
+      </tr>
+      <tr>
+        <td class="no-padding"><h4><code style="background: none">/another/url?b=34</code></h4></td>
+        <td class="no-padding"><h3>⟷</h3></td>
+        <td class="no-padding">
+          <img
+            src="/img/diagrams/routing-state-2.svg"
+            class="nobackground"
+            style="height: 6em"
+          >
+        </td>
+      </tr>
+    </table>
+    <br>
+    <p>URL is the source of truth</p>
+  </section>
+
+  <section>
+    <h2>Router terminology</h2>
+    <br />
+    <ul class="nobullet">
+      <li><mark>Configuration</mark> → URL-components mapping</li>
+      <li><mark>Outlet</mark> → place where to display on screen</li>
+      <li><mark>Router</mark> → an object implementing router API</li>
+      <li><mark>State</mark> → internal router state of the application</li>
+      <li><mark>Route</mark> → a component subtree + metadata</li>
+      <li><mark>Link</mark> → a directive that triggers URL change</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Lifecycle</h2>
+    <br/>
+    <p><mark class="blue">Parse URL & do redirects</mark></p>
+    <p>↓</p>
+    <p><mark class="blue">Create router state</mark></p>
+    <p>↓</p>
+    <p><mark class="blue">Load route data</mark></p>
+    <p>↓</p>
+    <p><mark class="blue">Create and display components</mark></p>
+    <p>↓</p>
+    <p style="position:relative; left: 5em"><mark class="blue">Handle navigation</mark> → new URL (goto beginning)</p>
+  </section>
+
+  <section>
+    <h2>Configuration</h2>
+    <br />
+    <p>All potential routes of the application</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      let routes: Routes = [
+        { path: "", redirectTo: "home" },
+        { path: "home", component: HomeComponent },
+        { path: "about", component: AboutComponent },
+        { path: "user/:id", component: UserComponent },
+        { path: "**", component: PageNotFoundComponent }
+      ];
+      ```
+      </script>
+    </div>
+    <p>Each route:</p>
+    <ul class="nobullet">
+      <li>maps a <mark>URL</mark> path to a <mark>component</mark></li>
+      <li>can define <mark>parameter</mark></li>
+      <li>can get arbitrary <mark>data</mark></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Configuration</h2>
+    <h4>Tips</h4>
+    <br />
+    <ul class="nobullet">
+      <li data-markdown>`path: ""` default route</li>
+      <li data-markdown>`path: "**"` wildcard catch all route</li>
+    </ul>
+    <hr />
+    <p>Route definition order matters. <mark>First-match</mark> strategy wins</p>
+  </section>
+
+  <section>
+    <h2>Outlet</h2>
+    <br />
+    <p>Specific location in the host view's HTML where to output the component tree</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <!-- Routed views go here -->
+      <router-outlet></router-outlet>
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Router state</h2>
+    <br />
+    <p>
+      On successful navigation, router builds a tree of active routes objects, reflecting the Components arrangement on the screen.
+    </p>
+    <br/>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      import { Router, ActivatedRoute, Params } from '@angular/router';
+
+      @Component({/* ... */})
+      export class MyComponent {
+        constructor(
+          private route: ActivatedRoute,
+          private router: Router) {
+        }
+      }
+      ```
+      </script>
+    </div>
+    <br/>
+    <p><mark>ActivatedRoute</mark> , <mark>Router</mark> &amp; <mark>RouterState</mark> services are injectable to any component to access router information.</p>
+  </section>
+
+  <section>
+    <h2>Reading data</h2>
+    <h4>in two ways</h4>
+    <p>Simply inject in your components Router pieces to read request parameters, route data ...</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { ActivatedRoute } from "@angular/router";
+
+@Component({/* ... */})
+class EditContactComponent {
+
+  id: string
+
+  constructor(route: ActivatedRoute) {
+
+    // 1. Use static snapshot
+    this.id = route.snapshot.params['id'];
+
+    // 2. Use observables
+    route.params.subscribe(params => {
+      this.id = params['id'];
+    });
+  }
+}
+```
+      </script>
+    </div>
+    <aside class="notes" data-markdown>
+      `ActivatedRoute` the one-stop-shop for route information. Almost everything is available as Observable
+      here: url, data, params, queryParams, fragment, outlet, the route config.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Navigation</h2>
+    <h4>Declarative vs Imperative</h4>
+    <br>
+    <p><mark>RouterLink</mark> directive is used</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <a routerLink="/about">About</a>
+      <a [routerLink]="['../user/12']">User</a>
+      ```
+      </script>
+    </div>
+    <br>
+    <p>Router API is used</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        router.navigate(['/about']);
+        router.navigate(['../user/12'], { relativeTo: currentRoute });
+        ```
+      </script>
+    </div>
+    <br>
+    <p><code>router.navigate()</code> will be absolute unless you use <code>relativeTo</code> option</p>
+  </section>
+
+  <section>
+    <h2>Importing router</h2>
+    <br />
+    <p>Router is located in the <code>'@angular/router'</code> module<br />
+      It is not part of the Angular core. You have to import it to use it.</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import { RouterModule } from "@angular/router";
+
+        @NgModule({
+          imports: [
+            /* ... */
+            RouterModule
+          ]
+        })
+        export class MyAppModule {}
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2><mark>Debugging</mark> router info</h2>
+    <br />
+    <p>
+      Router publishes an <code>events</code> observable that emits navigation events
+      <br />
+      Subscribe &amp; enjoy
+    </p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      import { Router } from '@angular/router';
+
+      @Component({/* ... */})
+      export class MyComponent {
+        constructor(router: Router) {
+          router.events.subscribe(event => console.log(event));
+        }
+      }
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Routing &amp; Navigation</h4>
+    <h2>Takeaways</h2>
+    <br />
+    <ul class="nobullet">
+      <li>Navigation is transformation of one router state into another</li>
+      <li>You define mapping between URL parts and Components</li>
+      <li>URL is the root of everything, a serialized router state</li>
+      <li>Router takes care of URL parsing &amp; updates</li>
+      <li>Router puts appropriate components into respective outlets</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 10</h1>
+    <h3>Routing</h3>
+    <p>Make a real 2-page application using routing and the following spec:</p>
+    <br>
+    <ul class="nobullet">
+      <li>'' → <code>ContactList</code></li>
+      <li>'list' → <code>ContactList</code></li>
+      <li>'create' → <code>EditContact</code> with a new Contact</li>
+      <li>'edit/12' → <code>EditContact</code> with a Contact (id = 12)</li>
+    </ul>
+  </section>
+
+  <section>
+    <img src="/img/exercises/10.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 10</h1>
+    <h3>Routing</h3>
+    <br>
+    <h1 timer="40"></h1>
+  </section>
+
+</section>

@@ -1,0 +1,180 @@
+<section
+  data-documentation-link="https://angular.io/docs/ts/latest/guide/router.html"
+>
+  <section data-slide-type="blue">
+    <h1>Advanced Routing</h1>
+    <br />
+    <h3>Async/Lazy Loading</h3>
+    <aside class="notes" data-markdown>
+    </aside>
+  </section>
+  <section>
+    <h2>Lazy loading</h2>
+    <h3><mark>Why ?</mark></h3>
+    <br />
+    <p>
+      Some modules must be loaded up front. Some others don't!
+    </p>
+    <br />
+    <ul class="nobullet">
+      <li><mark>AppModule</mark> → vital for the app to run</li>
+      <li><mark>AdminModule</mark> → only a few authorized users will go there</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Main benefits</h2>
+    <h4>Lazy loading</h4>
+    <br />
+    <ul>
+      <li>Feature areas only <mark>loaded when requested</mark></li>
+      <li><mark>Load time speed up</mark> (users visiting only certain areas of the app)</li>
+      <li>New lazy-loaded feature areas won't increase the size of the initial load bundle</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Configuration</h2>
+    <h4>Lazy loading</h4>
+    <br />
+    <div data-markdown style="float: left; width: 49%">
+      <script type="text/template">
+      ```typescript
+      // old admin-routing.module.ts
+      {
+        path: 'admin',
+        component: AdminComponent
+      }
+      ```
+      </script>
+    </div>
+    <div data-markdown style="float: right; width: 49%">
+      <script type="text/template">
+      ```typescript
+      // new admin-routing.module.ts
+      {
+        path: '', /* Empty path here */
+        component: AdminComponent
+      }
+      ```
+      </script>
+    </div>
+    <p style="clear: both">It's all about moving part of the conf to the parent level</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      // app-routing.module.ts
+      {
+        path: 'admin',
+        loadChildren: 'app/admin/admin.module#AdminModule'
+      }
+      ```
+      </script>
+    </div>
+
+  </section>
+  <section>
+    <h2>Configuration</h2>
+    <h4>Lazy loading</h4>
+    <br />
+    <p><mark>loadChildren</mark> = path to module + "#" + name of exported class module</p>
+    <hr />
+    <code>app/admin/admin.module#AdminModule</code>
+  </section>
+  <section>
+    <aside class="notes">
+      When the router navigates to this route, it uses the loadChildren string to dynamically load the AdminModule. Then it adds the AdminModule routes to its current route configuration. Finally, it loads the requested route to the destination admin component.
+      The lazy loading and re-configuration happen just once, when the route is first requested; the module and routes are available immediately for subsequent requests.
+      The root AppModule must neither load nor reference the AdminModule or its files.
+    </aside>
+    <h2>Init sequence</h2>
+    <h4>Lazy loading</h4>
+    <br />
+    <ul>
+      <li><mark>AdminModule</mark> is loaded dynamically</li>
+      <li>AdminModule <mark>routes</mark> are added to <mark>current routes definition</mark></li>
+      <li>Occurs <mark>only once</mark> when the route is requested for the first time</li>
+    </ul>
+  </section>
+
+  <section>
+     <p><mark>Remove any reference</mark> to AdminModule from AppModule</p>
+  </section>
+  <section>
+    <h2>CanLoad guard</h2>
+    <h4>Preventing (lazy) loading</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { AuthGuard } from './admin-guard.service';
+
+export const ROUTES_CONFIG = [{
+  path: 'admin',
+  loadChildren: 'app/admin/admin.module#AdminModule',
+  canLoad: [AuthGuard]
+}];
+
+@NgModule({ /* ... */ providers: [ AuthGuard ]});
+```
+      </script>
+    </div>
+    <p>One method to implement in your guard class</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+canLoad(route: Route): boolean {
+  let url = `/${route.path}`;
+  return this.checkLogin(url);
+}
+```
+      </script>
+    </div>
+  </section>
+  <section>
+    <h2>Pre-Loading</h2>
+    <h4>Automatic lazy loading</h4>
+    <br />
+    <ul class="nobullet">
+      <li>AppModule is loaded up front → Eager loading</li>
+      <li>AdminModule is loaded on demand, when clicked → Lazy loading</li>
+    </ul>
+    <hr />
+    <p>
+      <mark>Pre-loading is in between</mark>
+      <br/>By the time user navigates, module is here
+    </p>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/router.html#!#custom-preloading"
+  >
+    <h2>Pre-Loading</h2>
+    <h4>Router comes with 2 flavours</h4>
+    <br />
+    <ul>
+      <li>No preloading (default behaviour)</li>
+      <li>
+        Preloading all lazy loaded defined module routes
+        <div data-markdown>
+          <script type="text/template">
+```typescript
+import { PreloadAllModules } from '@angular/router';
+
+RouterModule.forRoot(
+  appRoutes
+  , { preloadingStrategy: PreloadAllModules }
+)
+```
+          </script>
+        </div>
+      </li>
+      <li>Use a CustomPreloadingStategy</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>CanLoad guards <mark>blocks</mark> preloading</h2>
+    <h4>This is by design</h4>
+    <br />
+    <p>To keep preloading with guard against unauthorized access</p>
+    <mark><del>CanLoad</del></mark> → <mark>CanActivate</mark>
+  </section>
+</section>

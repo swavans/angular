@@ -1,0 +1,204 @@
+<section
+  data-documentation-link="https://angular.io/docs/ts/latest/guide/testing.html"
+>
+  <section data-slide-type="blue">
+    <h1>Unit Testing</h1>
+  </section>
+
+  <section>
+    <h2>Tests? Are you kidding?</h2>
+    <p>Testing is fun. Configuring testing is even more fun</p>
+    <hr/>
+    <p>A lot of tools are available</p>
+    <ul class="nobullet">
+        <li><mark>Jasmine</mark> to write unit tests and expectations</li>
+        <li><mark>Protractor</mark> to write e2e tests</li>
+        <li><mark>Karma</mark> to run them</li>
+        <li><mark>@angular/core/testing</mark> and <mark>TestBed</mark> to help you build your tests</li>
+      </ul>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Jasmine</h2>
+    <h4>BDD framework for testing</h4>
+    <p>Write your <mark>suites</mark>, <mark>tests</mark> and <mark>expectations</mark></p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        // suites
+        describe('Expectations suite:', () => {
+
+          // tests
+          it('should show off some expectations', () => {
+
+            const arr = [1, 2, 3];
+            const t = 'text';
+
+            // expectations
+            expect(2+2).toBe(4);
+            expect(t).toEqual('text');
+            expect(t).not.toEqual('different text');
+            expect(x).toBeUndefined();
+            expect(arr).toContain(3);
+          });
+        });
+        ```
+      </script>
+    </div>
+    <a href="https://jasmine.github.io/edge/introduction">https://jasmine.github.io</a>
+  </section>
+
+  <section>
+    <h2>Karma</h2>
+    <h4>Spectacular test runner</h4>
+    <p>Configuration example</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```javascript
+        config.set({
+          frameworks: ['jasmine'],
+          plugins: [
+            require('karma-jasmine'),
+            require('karma-chrome-launcher')
+          ],
+          files: [
+            { pattern: '**/*.spec.js', watched: true }
+          ],
+          port: 9876,
+          colors: true,
+          logLevel: config.LOG_INFO,
+          autoWatch: true,
+          browsers: ['Chrome'],
+          singleRun: false
+        });
+        ```
+      </script>
+    </div>
+    <a href="https://karma-runner.github.io">https://karma-runner.github.io</a>
+  </section>
+
+  <section>
+    <h2>Tips</h2>
+    <h4>For the exercises</h4>
+    <br>
+    <ul class="nobullet">
+      <li><mark><code>npm run test</code></mark> → Chrome</li>
+      <li><mark><code>npm run test:firefox</code></mark> → Firefox</li>
+    </ul>
+    <br>
+    <br>
+    <ul class="nobullet">
+      <li>Use the <mark><code>debugger;</code></mark> statement</li>
+      <li>Use the <mark><code>fdescribe/xdescribe</code></mark> to focus or exclude a suite</li>
+      <li>Use the <mark><code>fit/xit</code></mark> to focus or exclude a test</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Let's see <mark>The Code</mark></h2>
+  </section>
+
+  <section>
+    <h1>Exercise 04</h1>
+    <h3>JS unit testing</h3>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        class BankAccount {
+
+          constructor(private _balance = 0) {}
+
+          withdraw(amount: number) {
+            if (this._balance > amount) {
+             this._balance -= amount;
+            }
+          }
+
+          get balance() {
+            return this._balance;
+          }
+        }
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 04</h1>
+    <h3>JS unit testing</h3>
+    <br>
+    <h1 timer="10"></h1>
+  </section>
+
+  <section>
+    <h2>Component testing</h2>
+    <h4><code>@angular/core/testing</code></h4>
+    <p>With angular-cli test files are created for your components</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      import { ComponentFixture, TestBed } from '@angular/core/testing';
+      import { TestComponent } from './test.component';
+
+      describe('TestComponent', () => {
+
+        beforeEach(() => {
+          TestBed.configureTestingModule({
+           declarations: [ TestComponent ]}
+          );
+        });
+
+        it('should create', () => {
+          const fixture = TestBed.createComponent(TestComponent);
+          const component = fixture.componentInstance;
+          fixture.detectChanges();
+          expect(component).toBeTruthy();
+        });
+      });
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>TestBed</h2>
+    <h4>Facilitates component testing</h4>
+    <ul class="nobullet">
+      <li>Configures a testing module</li>
+      <li>Helps with dependency injection and mocks</li>
+      <li>Instantiates a component to test</li>
+    </ul>
+  </section>
+
+
+  <section data-slide-type="pink">
+    <h4>Testing</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Write unit tests with Jasmine and '@angular/core/testing'</li>
+      <li>Run tests with Karma</li>
+      <li>Use TestBed to simplify component and module configuration</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 05</h1>
+    <h3>Component testing</h3>
+    <p>Write missing tests for the <code>ContactList</code> and <code>EditContact</code> components</p>
+  </section>
+
+  <section>
+    <img src="/img/exercises/05.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 05</h1>
+    <h3>Component testing</h3>
+    <br>
+    <h1 timer="30"></h1>
+  </section>
+
+</section>

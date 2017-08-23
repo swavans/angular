@@ -1,0 +1,111 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Advanced Routing</h1>
+    <br />
+    <h3>Data injection</h3>
+  </section>
+
+  <section>
+    <h2>Synchronizing</h2>
+    <h4>Data fetch and routing</h4>
+    <br/>
+    <p>From route configuration</p>
+    <ul class="nobullet">
+      <li><mark>data</mark> → allows to inject static data</li>
+      <li><mark>resolve</mark> → allows to inject async data</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>data injection</h2>
+    <h4>Static</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+{
+  path: 'create',
+  component: EditContact,
+  data: {
+    contact: {
+      firstName: 'Winnie',
+      lastName: 'The Pooh'
+    }
+  }
+}
+```
+      </script>
+    </div>
+    <br>
+    <p>Data will be available in activated route</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+const contact = this.route.snapshot.data['contact'];
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Data injection</h2>
+    <h4>With resolver</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+{
+  path: 'edit/:id,'
+  component: EditContact,
+  resolve: {
+    contact: ContactResolver
+  }
+}
+```
+      </script>
+    </div>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { Resolve } from '@angular/router';
+
+@Injectable()
+export class ContactResolver implements Resolve<Contact> {
+  constructor(private service: ContactService) {}
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
+    : Observable<Contact> | Promise<Contact> | Contact {
+
+    return this.service.getContact(route.params['id']);
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Routing: data injection</h4>
+    <h2>Takeaways</h2>
+    <br />
+    <ul class="nobullet">
+      <li>Configuration properties <mark>data</mark> and <mark>resolve</mark> to the rescue</li>
+      <li>Implement a <mark>Resolver</mark> or a simple function with the same signature</li>
+      <li><mark>Router will wait</mark> for all data to be resolved before navigating</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 12</h1>
+    <h3>Routing: Data injection</h3>
+  </section>
+
+  <section>
+    <img src="/img/exercises/12.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 12</h1>
+    <h3>Routing: Data injection</h3>
+    <br>
+    <h1 timer="30"></h1>
+  </section>
+</section>

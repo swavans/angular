@@ -1,0 +1,133 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Callbacks, promises, observables</h1>
+  </section>
+
+  <section>
+    <h2>It's the async world</h2>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+        ```javascript
+        function init() {
+          var link = document.getElementById("foo");
+
+          link.addEventListener("click", function changeColor() {
+            this.style.color = "lime";
+          });
+        }
+
+        init();
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>It's the async world</h2>
+    <img src="/img/event-loop.png" />
+    <br>
+    <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">What the heck is the event loop anyway?</a>
+  </section>
+
+  <section data-documentation-link="http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/">
+    <h2>Callback</h2>
+    <h4>Asynchronous action</h4>
+    <div data-markdown>
+      <script type="text/template">
+        ```javascript
+        function callback() { /* do stuff */ }
+
+        const button = element.getElementById('button');
+        button.addEventListener('click', callback);
+        ```
+      </script>
+    </div>
+    <br>
+    <ul class="nobullet">
+      <li>No guarantees</li>
+      <li>No exception handling</li>
+      <li>'Callback hell'</li>
+    </ul>
+  </section>
+
+  <section data-documentation-link="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">
+    <h2>Promise</h2>
+    <h4>Asynchronous operation</h4>
+    <div data-markdown>
+      <script type="text/template">
+        ```javascript
+        function onDone(data)   { /* do stuff */ }
+        function onError(error) { /* handle error */ }
+
+        const promise = fetch('http://example.com/data.json');
+        promise.then(onDone, onError);
+        ```
+      </script>
+    </div>
+    <br>
+    <ul class="nobullet">
+      <li>Returns a single value, one-shot operations</li>
+      <li>Better error handling</li>
+      <li>Can chain, aggregate, retry</li>
+      <li>Cannot cancel a Promise</li>
+    </ul>
+  </section>
+
+  <section data-documentation-link="http://www.thedotpost.com/2015/12/andre-medeiros-the-whole-future-declared-in-a-var">
+    <h2>Observable</h2>
+    <h4>Asynchronous stream</h4>
+    <div data-markdown>
+      <script type="text/template">
+        ```javascript
+        function onNext(data)   { /* do stuff */ }
+        function onError(error) { /* handle error */ }
+        function onDone()       { /* no more data */ }
+
+        const observable = getSomeObservableEventStream();
+        observable
+          .map(...)
+          .filter(...)
+          .subscribe(onData, onError, onDone);
+        ```
+      </script>
+    </div>
+    <br>
+    <ul class="nobullet">
+      <li>Great for handling streams</li>
+      <li>Better error handling</li>
+      <li>200+ operators (~15 frequently used)</li>
+      <li>Cancellable</li>
+      <li>Need an <a href="https://github.com/ReactiveX/rxjs">external library like RxJS</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Async stuff in <mark>Angular</mark>?</h2>
+    <h4>Promises or Observables</h4>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        interface SomethingThatReturnsAValue<T> {
+          returnValue: () => T | Promise<T> | Observable<T>;
+        }
+        ```
+      </script>
+    </div>
+    <br>
+    <p>Get used to them!</p>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Callbacks, promises, observables</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Know how JS works</li>
+      <li>Embrace asynchronous and reactive programming</li>
+      <li>Use promises and observables instead of callbacks</li>
+    </ul>
+  </section>
+
+</section>

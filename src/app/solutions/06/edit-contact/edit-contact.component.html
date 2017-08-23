@@ -1,0 +1,23 @@
+<h4>Add new contact</h4>
+
+<form>
+  <div class="form-group">
+    <label for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName"
+           #first
+           [value]="contact.firstName"
+           (input)="contact.firstName = first.value"
+           (keyup.Enter)="save()">
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input type="text" class="form-control" id="lastName"
+           #last
+           [value]="contact.lastName"
+           (input)="contact.lastName = last.value"
+           (keyup.Enter)="save()">
+  </div>
+</form>
+
+<button type="button" class="btn btn-primary" (click)="save()" [disabled]="!isValid()">Save</button>
+<button type="button" class="btn btn-secondary" (click)="clear()">Clear</button>

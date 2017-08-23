@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-hello-world',
@@ -7,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HelloWorldComponent implements OnInit {
 
-  year  = new Date().getFullYear();
-  month = new Date().getMonth();
+  year = new Date().getFullYear();
+
   constructor() { }
 
   ngOnInit() {

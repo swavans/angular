@@ -1,0 +1,21 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let c of contacts; trackBy: trackBy">
+    <th scope="row">{{ c.id }}</th>
+    <td>{{ c.firstName }}</td>
+    <td>{{ c.lastName }}</td>
+    <td>
+      <button role="button" class="btn btn-sm btn-outline-success" (click)="edit.next(c.id)">Edit</button>
+      <button type="button" class="btn btn-sm btn-outline-danger" (click)="remove.next(c.id)">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>

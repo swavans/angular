@@ -1,0 +1,117 @@
+<section
+  data-documentation-link="https://webpack.js.org"
+>
+  <section data-slide-type="blue">
+    <img src="/img/webpack.svg" alt="Webpack" class="nobackground"/>
+  </section>
+  <section>
+    <h2>What is <mark>Webpack</mark></h2>
+    <br />
+    <p>
+      Webpack is a highly configurable module bundler for javascript applications
+      <hr />
+      Configuration via a JSON object<br />
+      It relies on 4 concepts → <mark>Entry</mark>, <mark>Output</mark>, <mark>Loaders</mark> &amp; <mark>Plugins</mark>
+    </p>
+  </section>
+  <section
+    data-documentation-link="https://webpack.js.org/concepts/entry-points"
+  >
+    <h2>Entry</h2>
+    <h4>Webpack core concepts</h4>
+    <br />
+    <p>Webapck creates a graph of all dependencies.</p>
+    <p><mark>Entry</mark> → starting point of this graph</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```javascript
+      module.exports = {
+        entry: './path/to/my/entry/file.js'
+      };
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section
+    data-documentation-link="https://webpack.js.org/concepts/output"
+  >
+    <h2>Output</h2>
+    <h4>Webpack core concepts</h4>
+    <br />
+    <p>Once all your assets are bundled, webpack needs to know where to bundle it.</p>
+    <p><mark>Output</mark> → how to treat bundled code</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```javascript
+      var path = require('path');
+
+      module.exports = {
+        entry: './path/to/my/entry/file.js',
+        output: {
+          path: path.resolve(__dirname, 'dist'),
+          filename: 'my-first-webpack.bundle.js'
+        }
+      };
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section
+    data-documentation-link="https://webpack.js.org/concepts/loaders"
+  >
+    <h2>Loaders</h2>
+    <h4>Webpack core concepts</h4>
+    <br />
+    <p>Webpack can handle plenty of different assets (css, html, images) but only understand Javascript.</p>
+    <p><mark>Loaders</mark> → transform files into modules, then add to dependency graph.</p>
+    <ul>
+      <li>Transpile Typescript to Javascript (ts-loader)</li>
+      <li>Transpile ES201x to ESx (babel-loader)</li>
+      <li>Inline images as data-url encoded string (image-loader)</li>
+      <li>CSS preprocessors (sass-loader, less-loader)</li>
+    </ul>
+  </section>
+
+  <section
+    data-documentation-link="https://webpack.js.org/concepts/plugins"
+  >
+    <h2>Plugins</h2>
+    <h4>Webpack core concepts</h4>
+    <br />
+    <p>Loaders only work on a per-file basis.</p>
+    <p><mark>Plugins</mark> → perform action on "chunk" of bundled modules.</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```javascript
+      const webpack = require('webpack');
+      const config = {
+        entry: './path/to/my/entry/file.js',
+        output: {
+          path: path.resolve(__dirname, 'dist'),
+          filename: 'my-first-webpack.bundle.js'
+        },
+        plugins: [
+          new webpack.optimize.UglifyJsPlugin()
+        ]
+      };
+      module.exports = config;
+      ```
+      </script>
+    </div>
+  </section>
+  <section>
+    <h2>Webpack <mark>&amp;</mark> Angular</h2>
+    <br />
+    <p>Everything is burried into <mark>Angular CLI</mark></p>
+    <ul>
+      <li>Development configuration (Typescript, Hot module replacement, Styles)</li>
+      <li>Production configuration (Typescript, Aot, UglifyJs, Compression)</li>
+    </ul>
+    <p>
+      <hr />
+      <a href="https://github.com/angular/angular-cli/tree/master/packages/%40angular/cli/models/webpack-configs" target="_blank">Github link to webpack configs</a>
+    </p>
+  </section>
+</section>

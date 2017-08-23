@@ -1,0 +1,46 @@
+<h4>Add new contact</h4>
+
+<!-- TODO: display an error message here if the form is not valid -->
+<!-- ex-start -->
+<div class="alert alert-danger" *ngIf="!isValid()">
+  Fill both first and last names
+</div>
+<!-- ex-end -->
+
+<!-- TODO: bind form inputs to the model -->
+<form>
+  <div class="form-group">
+    <label for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName"
+           ex-start
+           #first
+           [value]="contact.firstName"
+           (input)="contact.firstName = first.value"
+           (keyup.Enter)="save()"
+           ex-end>
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input type="text" class="form-control" id="lastName"
+           ex-start
+           #last
+           [value]="contact.lastName"
+           (input)="contact.lastName = last.value"
+           (keyup.Enter)="save()"
+           ex-end>
+  </div>
+</form>
+
+<!-- TODO: handle button clicks and enable/disable them -->
+<button type="button" class="btn btn-primary"
+        ex-start
+        (click)="save()" [disabled]="!isValid()"
+        ex-end>Save</button>
+<button type="button" class="btn btn-secondary"
+        ex-start
+        (click)="clear()"
+        ex-end>Clear</button>
+
+<hr>
+
+<pre>Contacts: {{ contacts | json }}</pre>

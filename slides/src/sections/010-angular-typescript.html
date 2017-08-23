@@ -1,0 +1,294 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Angular</h1>
+  </section>
+
+  <section data-documentation-link="http://angular.io">
+    <h2>Meet Angular</h2>
+    <table style="margin: 0">
+      <tr>
+        <td width="35%">
+          <img src="/img/angular.png" class="nobackground" style="position: relative; left: 1em; top: 0.5em;"/>
+        </td>
+        <td>
+          <ul class="nobullet">
+            <li>Single Page Applications framework</li>
+            <li>Open Source, maintained by Google</li>
+            <li>Written in TypeScript</li>
+            <li>Built for performance</li>
+            <li>Focus on testability</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <br/>
+    <br/>
+    <a href="http://angular.io">http://angular.io</a>
+  </section>
+
+  <section>
+    <h2><mark>Reset</mark> your mind</h2>
+    <br>
+    <h3>Same terminology</h3>
+    <h3>Different notions</h3>
+  </section>
+
+  <section>
+    <h2><mark>complete</mark> framework</h2>
+    <br/>
+    <ul class="nobullet">
+      <li>Component-based architecture</li>
+      <li>Powerful templating</li>
+      <li>Automagical UI rendering, change detection</li>
+      <li>Testing tools</li>
+      <li>Routing and code splitting</li>
+      <li>Server-side compilation (AoT)</li>
+    </ul>
+  </section>
+
+  <section>
+    <img src="https://img.shields.io/npm/v/@angular/core.svg?label=Angular" class="nobackground" style="width: 100%"/>
+    <h4>Latest stable version</h4>
+  </section>
+
+  <section data-documentation-link="http://semver.org/">
+    <h2>Versioning</h2>
+    <h4>semver</h4>
+    <p><code>MAJOR.MINOR.PATCH</code></p>
+    <br/>
+    <ul class="nobullet">
+      <li><mark>MAJOR</mark> - <b>3</b>.2.1 - breaking changes (potentially) - twice per year</li>
+      <li><mark>MINOR</mark> - 3.<b>2</b>.1 - new features - monthly</li>
+      <li><mark>PATCH</mark> - 3.2.<b>1</b> - fixes - weekly</li>
+    </ul>
+    <br/>
+    <br/>
+    <p>Also beta and RC versions</p>
+  </section>
+
+  <section>
+    <img src="/img/diagrams/typescript.svg" class="nobackground" width="70%"/>
+  </section>
+
+  <section>
+    <h2>Why TypeScript?</h2>
+    <h4>"Javascript that scales"</h4>
+    <br/>
+    <ul class="nobullet">
+      <li>Well...... Types!</li>
+      <li>IDE support (autocompletion, refactoring, navigation)</li>
+      <li>Better static code analysis</li>
+      <li>Catch errors during compilation time</li>
+    </ul>
+  </section>
+
+  <section data-documentation-link="https://ponyfoo.com/articles/es6">
+    <h2>ES2015</h2>
+    <h4>Arrow functions</h4>
+    <div data-markdown>
+      <script type="text/template">
+      ```javascript
+      function sum(a, b) {
+        return a + b;
+      }
+
+      const sum = (a, b) => { return a + b; }
+      const sumshort = (a, b) => a + b;
+      const double = value => value * 2
+      ```
+      </script>
+    </div>
+    <br />
+    <ul class="nobullet">
+      <li><mark>single parameter</mark> → implicit parenthesis</li>
+      <li><mark>single expression</mark> → implicit return, no { }</li>
+      <li><mark>auto-bind</mark> this + arrow function → no more <code>self = this</code></li>
+    </ul>
+  </section>
+
+  <section data-documentation-link="https://ponyfoo.com/articles/es6">
+    <h2>ES2015</h2>
+    <h4>Classes</h4>
+    <div data-markdown>
+      <script type="text/template">
+      ```javascript
+      class Car {
+        constructor(color) {
+          this.color = color;
+        }
+      }
+
+      const car = new Car("green");
+      ```
+      </script>
+    </div>
+    <br />
+    <p>
+      Merely a syntactic sugar over the constructor function
+      <br />Note there are no private members
+    </p>
+  </section>
+
+  <section data-documentation-link="https://ponyfoo.com/articles/es6">
+    <h2>ES2015</h2>
+    <h4>Getters and setters</h4>
+    <div data-markdown>
+      <script type="text/template">
+```javascript
+class List {
+
+  data = [];
+
+  get last() {
+    return data.length > 0 ? data[data.length - 1] : undefined;
+  }
+
+  set last(item) {
+    this.data.push(item);
+  }
+}
+
+const list = new List();
+
+let a = list.last; // getter
+list.last = '42';  // setter
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-documentation-link="https://ponyfoo.com/articles/es6">
+    <h2>ES2015</h2>
+    <h4>Modules &amp; imports</h4>
+    <div data-markdown>
+      <script type="text/template">
+      ```javascript
+      // in baz.js
+      import { foo } from '../bar';
+      ```
+      </script>
+    </div>
+    <div data-markdown>
+      <script type="text/template">
+      ```javascript
+      // in bar.ts
+      export const foo = 42;
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section data-documentation-link="https://www.typescriptlang.org/docs/handbook/basic-types.html">
+    <h2>Typescript</h2>
+    <h4>Types</h4>
+    <p>Types are optional</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      let a;
+      let b: any;
+      let c: string;
+      let d: string | number;
+      let e: 'white' | 'black';
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section data-documentation-link="https://www.typescriptlang.org/docs/handbook/basic-types.html">
+    <h2>Typescript</h2>
+    <h4>Interfaces</h4>
+
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      interface Config {
+        color?: string;
+        size: number;
+      }
+
+      let c1: Config = {
+        size: 2
+      }
+
+      interface CanHonk {
+        canHonk(): boolean;
+      }
+
+      class Car implements CanHonk {
+      }
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Typescript</h2>
+    <h4>Constructor shortcuts</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+class Car {
+  constructor(private engine: Engine) {}
+}
+```
+      </script>
+    </div>
+    <p>is equivalent to</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+class Car {
+
+  private engine: Engine;
+
+  constructor(engine: Engine) {
+    this.engine = engine;
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-documentation-link="https://www.typescriptlang.org/docs/handbook/basic-types.html">
+    <h2>Angular</h2>
+    <h4>Decorators</h4>
+
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      @Component({
+        // metadata goes here
+      })
+      class MyComponent { }
+      ```
+      </script>
+    </div>
+
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      @NgModule({
+        // metadata goes here
+      })
+      class MyModule { }
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Angular</h4>
+    <h2>Takeaways</h2>
+    <br/>
+    <ul class="nobullet">
+      <li>Complete framework to build SPAs</li>
+      <li>Semantic versioning</li>
+      <li>Written in TypeScript</li>
+      <li>TypeScript &gt; ES2015 &gt; ES5</li>
+      <li>Types, classes, interfaces, decorators</li>
+    </ul>
+  </section>
+
+</section>

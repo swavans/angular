@@ -1,0 +1,120 @@
+.backgrounds {
+  top: 0;
+}
+.blue-slide {
+  background: #005eb8;
+}
+
+.blue-slide .controls div.navigate-up.enabled { border-bottom-color: #fff; }
+.blue-slide .controls div.navigate-right.enabled { border-left-color: #fff; }
+.blue-slide .controls div.navigate-down.enabled { border-top-color: #fff; }
+.blue-slide .controls div.navigate-left.enabled { border-right-color: #fff; }
+
+.blue-slide .progress span {
+  background: #fff;
+}
+
+mark {
+  display: inline-block;
+  padding: 2px 8px !important;
+  margin: 1px 0 !important;
+  background-color: #ffb549;
+  border-radius: 5px;
+  color: #fefefe;
+}
+
+mark > code {
+  background: none;
+}
+
+mark.blue {
+  background-color: #005eb8;
+}
+
+h1 mark, h2 mark, h3 mark, h4 mark, h5 mark, h6 mark {
+  background-color: transparent;
+  color: #ce0058;
+}
+
+.reveal code {
+  font-family: Menlo, monospace;
+}
+
+.reveal pre {
+  font-size: 0.53em;
+  line-height: 1.3em;
+}
+
+code {
+  background-color: transparent;
+  color: #333;
+  border-radius: 3px;
+}
+
+q {
+  quotes: "«" "»" "‹" "›";
+}
+
+ul.nobullet {
+  list-style: none;
+}
+
+li {
+  margin-bottom: 10px !important;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.table-center td {
+  vertical-align: middle;
+}
+
+.table-center td * {
+  margin: auto;
+}
+
+.countdown {
+  cursor: pointer;
+}
+
+.pink-slide {
+  background-color: #ce0058;
+}
+.pink-slide .controls div.navigate-up,
+.pink-slide .controls div.navigate-up.enabled { border-bottom-color: #fff; }
+
+.pink-slide .controls div.navigate-right,
+.pink-slide .controls div.navigate-right.enabled { border-left-color: #fff; }
+
+.pink-slide .controls div.navigate-down,
+.pink-slide .controls div.navigate-down.enabled { border-top-color: #fff; }
+
+.pink-slide .controls div.navigate-left,
+.pink-slide .controls div.navigate-left.enabled { border-right-color: #fff; }
+
+.pink-slide .progress span, .pink-slide mark {
+  background: #fff;
+  color: #ce0058;
+}
+
+
+.yellow-slide {
+  background-color: #ffb549;
+}
+.yellow-slide .controls div.navigate-up,
+.yellow-slide .controls div.navigate-up.enabled { border-bottom-color: #fff; }
+
+.yellow-slide .controls div.navigate-right,
+.yellow-slide .controls div.navigate-right.enabled { border-left-color: #fff; }
+
+.yellow-slide .controls div.navigate-down,
+.yellow-slide .controls div.navigate-down.enabled { border-top-color: #fff; }
+
+.yellow-slide .controls div.navigate-left,
+.yellow-slide .controls div.navigate-left.enabled { border-right-color: #fff; }
+
+.yellow-slide .progress span {
+  background: #fff;
+}

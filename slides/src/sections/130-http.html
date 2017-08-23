@@ -1,0 +1,195 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>HTTP</h1>
+  </section>
+
+  <section>
+    <h2>Http Client</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Based on XMLHttpRequest</li>
+      <li>Very simple Observable-based API</li>
+      <li>Assumes JSON as default response type</li>
+      <li>Handles XSRF tokens, CORS out of the box</li>
+      <li>Focus on testablilty</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Doing requests</h2>
+    <h4>With observables</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+class ContactService {
+
+  constructor(private http: HttpClient) {
+
+    http.get('http://url', options)
+      .subscribe(data => {
+        // yay, got data
+      });
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Doing requests</h2>
+    <h4>With promises</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import 'rxjs/add/operator/toPromise';
+
+class ContactService {
+
+  constructor(private http: HttpClient) {
+
+    http.get('http://url', options).toPromise()
+      .then(data => {
+        // yay, got data
+      });
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Doing requests</h2>
+    <h4>shortcuts</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+// canonical form
+http.request('GET', 'url', options);
+
+// nice shortcuts
+http.get('url');
+http.post('url');
+http.delete('url');
+// ...
+
+// also can use JSONP
+http.jsonp('url');
+
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-documentation-link="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS">
+    <h2>CORS</h2>
+    <h4>Cross-Origin Resource Sharing</h4>
+    <img src="/img/cors.png">
+    <p>Pre-flight requests</p>
+  </section>
+
+  <section>
+    <h2>Importing Http Client</h2>
+    <br />
+    <p>It is located in a separate <code>'@angular/core/http'</code> module<br />
+      Don't forget to import it.</p>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import {HttpClientModule} from '@angular/common/http';
+
+@NgModule({
+  imports: [HttpClientModule]
+})
+export class MyModule {}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Testability</h2>
+    <p>Setup</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+
+TestBed.configureTestingModule({
+  imports: [HttpClientTestingModule],
+});
+```
+      </script>
+    </div>
+    <p>Mocking</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+it('expect a GET', inject([HttpClient, HttpTestingController], (http, httpMock) => {
+
+  http.get('/contacts/2').subscribe((contact: Contact) => {
+    expect(contact).toEqual({firstName: 'Winnie', lastName: 'The Pooh'})
+  });
+
+  const req = httpMock.expectOne('/contacts/2');
+  expect(req.request.method).toEqual('GET');
+
+  // Transmit the response
+  req.flush({firstName: 'Winnie', lastName: 'The Pooh'});
+
+  // Assert there are no outstanding requests
+  httpMock.verify();
+}));
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>But we need a backend?</h2>
+    <h4>Restful API with <mark>JSON-SERVER</mark></h4>
+    <br>
+    <a href="https://github.com/typicode/json-server">https://github.com/typicode/json-server</a>
+  </section>
+
+  <section>
+    <h2>Where is the database?</h2>
+    <br>
+    <p>It's just a JSON file</p>
+    <p><code>db/contacts.json</code></p>
+    <br>
+    <p>Reset the file to restore deleted/modified contacts</p>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>HTTP</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Simple observable-based HTTP client</li>
+      <li>Separate HttpClientModule</li>
+      <li>Mock HTTP requests for tests</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 11</h1>
+    <h3>HTTP</h3>
+    <p>Make the <code>ContactService</code> do real http calls to the local <a href="http://localhost:3000">Json-Server</a></p>
+    <br>
+    <p>Use <mark>Promises</mark> or <mark>Observables</mark> as you wish</p>
+  </section>
+
+  <section>
+    <img src="/img/exercises/11.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 11</h1>
+    <h3>HTTP</h3>
+    <br>
+    <h1 timer="40"></h1>
+  </section>
+</section>

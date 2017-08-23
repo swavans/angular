@@ -1,0 +1,478 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Rendering</h1>
+    <h2>Angular internals</h2>
+  </section>
+
+  <section>
+    <h2>Rendering</h2>
+    <h4>UI = fn(Model)</h4>
+    <br>
+    <p>Automagical rendering with Change Detection</p>
+  </section>
+
+  <section>
+    <h2>Rendering model</h2>
+    <h4>Elements</h4>
+    <br>
+    <ul class="nobullet">
+      <li>Element</li>
+      <li>Component</li>
+      <li>Directive</li>
+      <li>Template</li>
+      <li>View</li>
+      <li>View Container</li>
+      <li style="color: grey">... and more</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Element</h2>
+    <br>
+    <p>A wrapper around the DOM element</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+export class ElementRef {
+  public nativeElement: any;
+}
+```
+      </script>
+    </div>
+
+    <p>That you can inject</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({/* ... */})
+export class MyComponent {
+
+  constructor(private el: ElementRef) {}
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Component</h2>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+@Component({
+  selector: 'my-component',
+  template: `
+    Hello, <b>Angular</b>
+  `
+})
+export class MyComponent {}
+```
+      </script>
+    </div>
+
+    <p>Generated DOM</p>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<div>
+  <my-component>
+    Hello, <b>Angular</b>
+  </my-component>
+</div>
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Directive</h2>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Directive({
+  selector: 'div[myDirective]'
+})
+export class MyDirective1 {}
+```
+      </script>
+    </div>
+
+    <p>That you can stick into DOM</p>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<div>
+  <div myDirective myAnotherDirective>
+    Hello, Angular
+  </div>
+</div>
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Template</h2>
+    <h4>&lt;ng-template&gt; element</h4>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+<ng-template #tpl>
+  Hello, <b>{{ name }}</b>
+</ng-template>
+
+<my-component [t]="tpl"></my-component>
+        ```
+      </script>
+    </div>
+
+    <p><code>TemplateRef</code> type</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component(/* ... */)
+export class MyComponent {
+
+  @Input() t: TemplateRef<Context>;
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Template</h2>
+    <h4>Remember ngIf?</h4>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<div *ngIf="condition">Hello, Angular</div>
+
+<ng-temlpate [ngIf]="condition">
+  <div>Hello, Angular</div>
+</ng-temlpate>
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>View</h2>
+    <h4></h4>
+    <p>It is the smallest grouping of Elements which are created and destroyed together</p>
+    <br>
+    <ul class="nobullet">
+      <li>Element properties might change</li>
+      <li>Structure never changes</li>
+    </ul>
+    <div data-markdown>
+      <script type="text/template">
+```html
+@Component({
+  template: `
+  <div>
+    <h1 [style.color]="color">{{ heading }}</h1>
+    <div *ngIf="condition">Hello, {{ name }}</div>
+  </div>
+  `
+})
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>View</h2>
+    <h4>It's more that just a group of elements</h4>
+    <br>
+    <p>It also manages own change detection</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+abstract class ViewRef extends ChangeDetectorRef { /* ... */ }
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>View</h2>
+    <h4>Three types of views</h4>
+    <br>
+    <ul class="nobullet">
+      <li><mark>Host</mark> → host element + component directive</li>
+      <li><mark>Component</mark> → the view of the component</li>
+      <li><mark>Embedded</mark> → views embedded via <code>&lt;ng-temlpate&gt;</code></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Host Element</h2>
+    <h4>And View</h4>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<div myDirective1 myDirective2>  <!-- host element -->
+  <my-component [class.disabled]="isDisabled"> <!-- host element, host view -->
+    <div>Hello, Angular</div> <!-- component view -->
+    <div *ngIf="condition"></div> <!-- embedded view -->
+  </my-component>
+</div>
+```
+      </script>
+    </div>
+
+    <p>Host element bindings can be internal</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({
+  selector: 'my-component',
+  host: {'style.color': 'color'}
+})
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>View Container</h2>
+    <h4>managing views</h4>
+    <p>Simply a container where one or more views can be attached</p>
+    <p>A high level API for creating, attaching and destroying views</p>
+    <br>
+    <p>That you can inject</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({/* ... */})
+export class MyComponent {
+
+  constructor(private vcr: ViewContainerRef) {}
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>But what if I have some kind of  <mark>Popup</mark>?</h2>
+    <h4>You might want dynamic content creation</h4>
+    <p>Pass a string</p>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<div [tooltip]="Hello there"></div>
+```
+      </script>
+    </div>
+    <p>Pass a template</p>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<ng-template #t>...</ng-template>
+<div [tooltip]="t"></div>
+```
+      </script>
+    </div>
+    <p>Create a service</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+popupService.createPopup(SomeComponent);
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2><mark>Dynamic</mark> creation</h2>
+    <h4>In three simple steps</h4>
+    <br>
+    <ol>
+      <li><mark>Create</mark> Component or Embedded View</li>
+      <li><mark>Attach</mark> the view to the DOM</li>
+      <li>Add view to the <mark>change detection</mark></li>
+    </ol>
+    <br>
+    <br>
+    <p>Don't forget to clean up after yourself!</p>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>DEMO</h1>
+    <br>
+    <h2>Let's see it in practice</h2>
+  </section>
+
+  <section>
+    <h2>Dynamic instantiation</h2>
+    <h4>Component</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+constructor(private vcr: ViewContainerRef,
+            private cfr: ComponentFactoryResolver) {}
+
+create() {
+  const componentFactory = this.cfr.resolveComponentFactory(ComponentType);
+
+  // 1. create component an its views
+  // 2. attach to view container
+  // 3. register in change detection
+  const componentRef: ComponentRef = this.vcr.create(componentFactory);
+
+  componentRef.instance; // to access component instance
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Dynamic instantiation</h2>
+    <h4>Template</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+// some template reference
+private tplRef: TemplateRef<any>;
+
+constructor(private vcr: ViewContainerRef) {}
+
+create() {
+  // 1. create embedded view
+  // 2. attach to view container
+  // 3. register in change detection
+  const embeddedViewRef: EmbeddedViewRef = this.vcr.createEmbeddedView(this.tplRef);
+
+  embeddedViewRef.rootNodes; // to access root DOM nodes
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 15</h1>
+    <h3>Typeahead Directive</h3>
+    <br>
+    <h1 timer="30"></h1>
+  </section>
+
+  <section>
+    <h2>Views with 'holes'</h2>
+    <h4>ng-content</h4>
+    <p>Used for components tied together (ex. like for tabs)</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({
+  selector: 'tab-list'
+  template: `
+    <div class="tabList">
+      <ng-content></ng-content>
+    </div>
+  `
+})
+export class TabList {
+  @ContentChildren(Tab) tabs: QueryList<Tab>;
+}
+```
+      </script>
+    </div>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<tab-list>
+  <tab>one</tab>
+  <tab>two</tab>
+  <tab>three</tab>
+</tab-list>
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Views with 'holes'</h2>
+    <h4>children access</h4>
+    <br>
+    <p><code>@ViewChild, @ContentChild</code></p>
+    <p><code>@ViewChildren, @ContentChildren</code></p>
+    <br>
+    <ul class="nobullet">
+      <li><mark>View</mark> - query component's view</li>
+      <li><mark>Content</mark> - query projected content</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Views with 'holes'</h2>
+    <h4>parent access</h4>
+    <p>Just inject it</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({
+  selector: 'tab'
+})
+export class Tab {
+  constructor(private tablist: TabList) {}
+}
+  ```
+      </script>
+    </div>
+    <br>
+    <p>Be careful with tight coupling, prefer events</p>
+  </section>
+
+  <section>
+    <h2>Views with 'holes'</h2>
+    <h4>Example ng-bootstrap</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({selector: 'ngb-rating'})
+export class NgbRating {
+
+  @Input() @ContentChild(TemplateRef)
+  starTemplate: TemplateRef<StarTemplateContext>;
+}
+
+interface StarTemplateContext {
+  fill: number;
+}
+```
+      </script>
+    </div>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<ngb-rating [(rate)]="currentRate">
+  <ng-template let-fill="fill">
+    <span class="star" [class.filled]="fill === 100">&#9733;</span>
+  </ng-template>
+</ngb-rating>
+  ```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Rendering</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Complex rendering model</li>
+      <li>Elements, Views, Components, Directives</li>
+      <li>Embedded and Component views</li>
+      <li>You can create them imperatively if necessary</li>
+      <li>Content projection with ng-content</li>
+    </ul>
+  </section>
+
+</section>

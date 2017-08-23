@@ -1,0 +1,229 @@
+<section
+  data-documentation-link="https://angular.io/docs/ts/latest/guide/lifecycle-hooks.html"
+>
+  <section data-slide-type="blue">
+    <h1>LifeCycle</h1>
+    <h2>Hooks / Zones / Change detection</h2>
+  </section>
+
+  <section>
+    <h2>Lifecycle hooks</h2>
+    <br />
+    <p>Any component get a lifecycle managed by Angular</p>
+    <ul>
+      <li>Creation</li>
+      <li>Rendering</li>
+      <li>Children creation, rendering</li>
+      <li>Properties changes</li>
+      <li>Destroying</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Hook types sequence</h2>
+    <h4>Component/Directive lifecycle</h4>
+    <br />
+    <p>
+      <mark>ngOnChanges</mark> →
+      <mark>ngOnInit</mark> →
+      <mark>ngDoCheck</mark>
+      <hr />
+      <mark>ngAfterContentInit</mark> →
+      <mark>ngAfterContentChecked</mark>
+      <hr />
+      <mark>ngAfterViewInit</mark> →
+      <mark>ngAfterViewChecked</mark>
+      <hr/>
+      <mark>ngOnDestroy</mark>
+    </p>
+  </section>
+
+  <section>
+    <h2>Hook types</h2>
+    <h4>Component/Directive hooks</h4>
+    <br />
+    <ul class="nobullet">
+      <li><mark>ngOnChanges</mark> → (re)sets data-bound input properties. Receives an object w/ current &amp; previous values.</li>
+      <li><mark>ngOnInit</mark> → initialize component after first display (called <em>once</em> after the <em>first</em> ngOnChanges).</li>
+      <li><mark>ngDoCheck</mark> → detect &amp; act upon changes can't detect (called every change detection run).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Component-<mark>only</mark> hooks</h2>
+    <h4>Hook types</h4>
+
+    <br />
+    <ul class="nobullet">
+      <li><mark>ngAfterContentInit</mark> → after external content is projected into component's view (called <em>once</em> after the <em>first</em> ngDoCheck).</li>
+      <li><mark>ngAfterContentChecked</mark> → check the content projected into the component (called after ngAfterContentInit &amp; every subsequent ngDoCheck).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Component-<mark>only</mark> hooks</h2>
+    <h4>Hook types</h4>
+    <br />
+    <ul class="nobullet">
+      <li><mark>ngAfterViewInit</mark> → after component's views (&amp; child views) initialization (called <em>once</em> after ngAfterContentChecked).</li>
+      <li><mark>ngAfterViewChecked</mark> → check the component's views (&amp; child views). (called after the ngAfterViewInit &amp; every subsequent ngAfterContentChecked).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Hook types</h2>
+    <h4>Component/Directive hook</h4>
+    <br />
+    <ul class="nobullet">
+      <li><mark>ngOnDestroy</mark> → Cleanup just before component's destroy.
+      <br/>Good place to unsubscribe observables &amp; detach event listeners.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Tips &amp; tricks</h2>
+    <h4>Component construction &amp; initialization</h4>
+    <br />
+    <p>Component should be <mark>cheap</mark> &amp; <mark>safe</mark> to construct.</p>
+    <p>Don't fetch data in constructor → do it via ngOnInit</p>
+    <br />
+    <blockquote>
+      Constructors should do no more than set the initial local variables to simple values
+    </blockquote>
+  </section>
+
+  <section>
+    <h2>Tips &amp; tricks</h2>
+    <h4>ngDoCheck</h4>
+    <br />
+    <p>This hook is called with enornous frequency.</p>
+    <p>After every single change detection cycle, no matter where the change occured.</p>
+    <br />
+    <blockquote>
+      Implementation must be very lightweight or the user experience will suffer
+    </blockquote>
+  </section>
+
+  <section data-slide-type="blue">
+    <h1>Zones</h1>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/glossary.html#!#Z"
+  >
+    <h2>Zone.js</h2>
+    <h4>What are zones?</h4>
+    <br />
+    <p>Zones are a mechanism for encapsulating &amp; intercepting Javascript application's asynchronous activity</p>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/glossary.html#!#Z"
+  >
+    <h2>Zone.js</h2>
+    <h4>How change detection works</h4>
+    <br />
+    <p>The browser DOM and JavaScript have a limited number of asynchronous activities, activities such as DOM events (for example, clicks), promises, and XHR calls to remote servers</p>
+    <hr/>
+    <p>Zones intercept all of these activities and give a "zone client" the opportunity to take action before and after the async activity finishes</p>
+  </section>
+
+  <section
+    data-documentation-link="https://www.youtube.com/watch?v=3IqtmUscE_U"
+  >
+    <h2>Zones &amp; Angular</h2>
+    <h4>Is it really magical?</h4>
+    <br />
+    <p>Angular runs your application in a zone where it can respond to asynchronous events by checking for data changes, and updating the information it displays via data bindings</p>
+    <br />
+    <p><small>(Want more? <a href="https://www.youtube.com/watch?v=3IqtmUscE_U" target="_blank">Here</a> is a video from Brian Ford)</small></p>
+  </section>
+
+  <section data-slide-type="blue">
+    <h1>Running Mode</h1>
+  </section>
+
+  <section>
+    <h2><mark>Prod</mark> vs. <mark>Dev</mark></h2>
+    <h2>mode</h2>
+  </section>
+
+  <section>
+    <h2><mark>Prod</mark> mode</h2>
+    <br />
+
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      import {enableProdMode} from '@angular/core';
+      import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+      enableProdMode();
+      platformBrowserDynamic.bootstrapModule(/* .... */);
+      ```
+      </script>
+    </div>
+    <p>Turns off assertions &amp; other checks</p>
+    <p>
+      Disables verification that a change detection pass does not result in additional changes to any bindings
+    </p>
+  </section>
+
+  <section>
+    <h2><mark>Dev</mark> mode</h2>
+    <h4>Unidirectional data flow</h4>
+    <br />
+    <p>In dev mode, a second change detection cycle is triggered.</p>
+    <p>Additional changes here, would mean that bindings have side effects</p>
+
+  </section>
+
+  <section data-slide-type="blue">
+    <h1>Change <br>Detection Strategy</h1>
+  </section>
+
+  <section>
+    <h2>Change Detection Strategy</h2>
+    <h4>What to be done when change detection is triggered ?</h4>
+    <br />
+    <ul class="nobullet">
+      <li><mark>Default</mark> → Conservative: re-evaluate all expressions on each change detection.</li>
+      <li><mark>OnPush</mark> → Only re-evaluate expressions of <code>@Input</code> binding that changed (changes from outside of the component).</li>
+    </ul>
+  </section>
+
+  <section>
+    <img src="/img/diagrams/change-detection.svg" class="nobackground"/>
+  </section>
+
+  <section>
+    <h2>Activating <mark>OnPush</mark> Strategy</h2>
+
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      import {Component, OnChanges, ChangeDetectionStrategy, DoCheck, ChangeDetectorRef, OnInit} from '@angular/core';
+      @Component({
+        /* ... */
+        changeDetection: ChangeDetectionStrategy.OnPush
+      })
+      export class Component implements OnChanges, DoCheck {
+        constructor(private changeDetector: ChangeDetectorRef) {}
+
+        ngDoCheck() {
+          // called every time, with or without `onPush`
+        }
+
+        ngOnChanges(changes) {
+          // called only if your @input are changing (by reference!)
+          // Update your internal state here also
+        }
+      }
+      ```
+      </script>
+    </div>
+  </section>
+
+
+
+</section>

@@ -1,0 +1,45 @@
+<h4>Add new contact</h4>
+
+<!-- TODO: add template-driven form validation using ngModel directive. See steps in readme file -->
+<form #f="ngForm" novalidate>
+  <div class="form-group"
+       ex-start
+       [class.has-danger]="!firstName.valid"
+       ex-end>
+    <label class="form-control-label" for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName"
+           ex-start
+           name="firstName"
+           [(ngModel)]="contact.firstName"
+           #firstName="ngModel"
+           required
+           (keyup.Enter)="f.valid && save()"
+           ex-end>
+    <!-- ex-start -->
+    <div *ngIf="!firstName.valid" class="form-control-feedback">First name is required</div>
+    <!-- ex-end -->
+  </div>
+  <div class="form-group"
+       ex-start
+       [class.has-danger]="!lastName.valid"
+       ex-end>
+    <label class="form-control-label" for="lastName">Last Name</label>
+    <input type="text" class="form-control" id="lastName"
+           ex-start
+           name="lastName"
+           [(ngModel)]="contact.lastName"
+           #lastName="ngModel"
+           required
+           (keyup.Enter)="f.valid && save()"
+           ex-end>
+    <!-- ex-start -->
+    <div *ngIf="!lastName.valid" class="form-control-feedback">Last name is required</div>
+    <!-- ex-end -->
+  </div>
+</form>
+
+<button type="button" class="btn btn-primary" (click)="save()"
+        ex-start
+        [disabled]="!f.valid"
+        ex-end>Save</button>
+<button type="button" class="btn btn-secondary" (click)="clear()">Clear</button>

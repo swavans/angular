@@ -1,0 +1,9 @@
+<h4 *ngIf="!contact?.id">Add new contact</h4>
+<h4 *ngIf="contact?.id">Edit contact {{contact?.id}}</h4>
+
+<app-edit-contact
+  [contact]="contact"
+  (save)="onSave($event)">
+</app-edit-contact>
+
+<button type="button" class="btn btn-secondary" (click)="goBack()">Cancel</button>

@@ -1,0 +1,16 @@
+<h4>Add new contact</h4>
+
+<!-- TODO: add template-driven form validation using ngModel directive. See steps in readme file -->
+<form #f="ngForm" novalidate>
+  <div class="form-group">
+    <label class="form-control-label" for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName">
+  </div>
+  <div class="form-group">
+    <label class="form-control-label" for="lastName">Last Name</label>
+    <input type="text" class="form-control" id="lastName">
+  </div>
+</form>
+
+<button type="button" class="btn btn-primary" (click)="save()">Save</button>
+<button type="button" class="btn btn-secondary" (click)="clear()">Clear</button>

@@ -1,0 +1,19 @@
+<div class="card">
+  <div class="card-block">
+    <div class="card-title"><h2>Contacts App</h2></div>
+    <hr>
+
+    <!-- TODO: add inputs and outputs to both app-edit-contact and app-contact-list components-->
+    <app-edit-contact class="d-block mb-5"
+      ex-start
+      [contact]="contact"
+      (save)="save($event)"
+      ex-end></app-edit-contact>
+
+    <app-contact-list (remove)="remove($event)"
+                      ex-start
+                      [contacts]="contacts"
+                      (edit)="contact = $event"
+                      ex-end></app-contact-list>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="form-group d-flex">
+  <input type="text" class="form-control" placeholder="Filter contacts" #filter (input)="term = filter.value">
+  <!-- TODO: make the 'New Contact' button work -->
+  <a role="button" href="" class="btn btn-primary ml-3"
+     ex-start
+     routerLink="../create"
+     ex-end>New Contact</a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let c of contacts | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+    <th scope="row">{{ c.id }}</th>
+    <td>{{ c.firstName }}</td>
+    <td>{{ c.lastName }}</td>
+    <td>
+      <!-- TODO: make the 'Edit' button work -->
+      <a role="button" href="" class="btn btn-sm btn-outline-success"
+         ex-start
+         [routerLink]="['../edit', c.id]"
+         ex-end>Edit</a>
+      <button type="button" class="btn btn-sm btn-outline-danger" (click)="onRemove(c)">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<ngb-pagination class="d-flex justify-content-center" [(page)]="page" [collectionSize]="contacts.length" [pageSize]="pageSize"></ngb-pagination>

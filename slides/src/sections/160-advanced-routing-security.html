@@ -1,0 +1,227 @@
+<section
+  data-documentation-link="https://angular.io/docs/ts/latest/guide/router.html"
+>
+  <section data-slide-type="blue">
+    <h1>Advanced Routing</h1>
+    <br />
+    <h3>Security</h3>
+    <aside class="notes" data-markdown>
+    </aside>
+  </section>
+  <section>
+    <h2>Guards</h2>
+    <br />
+    <ul class="nobullet">
+      <li><mark>CanActivate</mark> → prevent navigation to a route</li>
+      <li><mark>CanActivateChild</mark> → prevent navigation to a child route</li>
+      <li><mark>CanDeactivate</mark> → prevent navigation away from current route</li>
+      <li><mark>CanLoad</mark> → prevent async navigation to a route</li>
+      <li><br /></li>
+      <li><mark>Resolve</mark> → pre-fetch data before route activation</li>
+    </ul>
+  </section>
+  <section>
+    <aside class="notes" data-markdown>
+      Applications often restrict access to a feature area based on who the user is. You could permit access only to authenticated users or to users with a specific role. You might block or limit access until the user's account is activated.
+    </aside>
+    <h2><mark>CanActivate</mark> guard</h2>
+    <h4>Route configuration</h4>
+    <br />
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { AdminComponent } from "./admin.component";
+import { AdminGuard } from "./admin-guard.service";
+
+export const ROUTES_CONFIG = [{
+  path: 'admin',
+  component: AdminComponent,
+  canActivate: [AdminGuard]
+}];
+```
+      </script>
+    </div>
+  </section>
+  <section>
+    <aside class="notes" data-markdown>
+      Applications often restrict access to a feature area based on who the user is. You could permit access only to authenticated users or to users with a specific role. You might block or limit access until the user's account is activated.
+    </aside>
+    <h2><mark>CanActivate</mark> guard</h2>
+    <h4>Guard definition</h4>
+    <br />
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { Injectable } from "@angular/core";
+import { Router, CanActivate, ActivatedRouteSnapshot,
+  RouterStateSnapshot } from "@angular/router";
+
+import { AuthService } from "./auth.service";
+
+@Injectable()
+export class AdminGuard implements CanActivate {
+  constructor(private router: Router, private authService: AuthService) {
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+    Observable<boolean> | Promise<boolean> | boolean {
+    let url: string = state.url;
+    return this.checkAdmin(url);
+  }
+
+  checkAdmin(url: string): boolean {
+    if (this.authService.isLoggedIn) { return true; }
+    this.authService.redirectUrl = url;
+    this.router.navigate(['/login']);
+    return false
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+  <section>
+    <h2><mark>CanActivateChild</mark> guard</h2>
+    <h4>Same as CanActivate</h4>
+    <br />
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { CanActivateChild } from "@angular/router";
+
+@Injectable()
+export class AdminGuard implements CanActivateChild {
+
+  canActivateChild():
+    Observable<boolean> | Promise<boolean> | boolean { /* ... */ }
+}
+```
+      </script>
+    </div>
+    <br />
+    <p>Useful when used with <mark>Componentless</mark> route definition.
+    <br />
+    You can define 1 guard and apply it to all children</p>
+  </section>
+
+  <section>
+    <h2><mark>CanDeactivate</mark> guard</h2>
+    <h4>handling unsaved changes</h4>
+    <br />
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { CanDeactivate } from "@angular/router";
+import { AdminComponent } from "./admin.component";
+
+@Injectable()
+export class CheckSavedGuard implements CanDeactivate {
+
+  canDeactivate(
+    component: AdminComponent
+  ): Observable<boolean> | Promise<boolean> | boolean {
+
+    return component.isValid;
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+<section>
+    <h2><mark>CanDeactivate</mark> guard</h2>
+    <h4>Route configuration</h4>
+    <br />
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { AdminComponent } from "./admin.component";
+import { AdminGuard } from "./admin-guard.service";
+
+export const ROUTES_CONFIG = [{
+  path: 'admin',
+  component: AdminComponent,
+  caActivate: [AdminGuard],
+  canDeactivate: [CheckSavedGuard]
+}]
+```
+      </script>
+    </div>
+  </section>
+
+
+  <section>
+    <h2>Generic <mark>CanDeactivate</mark> guard</h2>
+    <h4>works with any component</h4>
+    <br />
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { CanDeactivate } from "@angular/router";
+
+export interface CanComponentDeactivate {
+  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+}
+
+@Injectable()
+export class CheckSaveGuard implements CanDeactivate<CanComponentDeactivate> {
+
+  canDeactivate(
+    component: CanComponentDeactivate,
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean> | boolean {
+    return component.canDeactivate ? component.canDeactivate() : true;
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+  <section>
+    <h2>Reminder</h2>
+    <h3><mark>Providers</mark></h3>
+    <br />
+    <p>Don't forget to declare all your guards in your module providers section</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+import { AdminComponent } from "./admin.component";
+import { AdminGuard } from "./admin-guard.service";
+
+export const ROUTES_CONFIG = [{
+  path: 'admin',
+  component: AdminComponent,
+  canActivate: [AdminGuard]
+}];
+
+@NgModule({
+  imports: [RouterModule.forChild(ROUTES_CONFIG)],
+  exports: [RouterModule],
+  providers: [
+    AdminGuard
+  ]
+})
+export class AdminRoutingModule {}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h1>Exercise 13</h1>
+    <h3>Routing: using Guards</h3>
+  </section>
+
+  <section>
+    <img src="/img/exercises/13.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 13</h1>
+    <h3>Routing: using Guards</h3>
+    <br>
+    <h1 timer="30"></h1>
+  </section>
+</section>

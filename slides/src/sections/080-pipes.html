@@ -1,0 +1,169 @@
+<section
+  data-documentation-link="https://angular.io/docs/ts/latest/guide/pipes.html"
+>
+  <section data-slide-type="blue">
+    <h1>Pipes</h1>
+  </section>
+
+  <section>
+    <h2>Pipes</h2>
+    <p>Pipes are all about transformation of data and can be used in ANY binding expression (interpolation, directive...).</p>
+  </section>
+
+  <section>
+    <h2>Built-in Pipes</h2>
+    <p>
+      <mark>JsonPipe</mark> , <mark>DatePipe</mark> ,
+      <mark>UpperCasePipe</mark> , <mark>LowerCasePipe</mark> , <mark>CurrencyPipe</mark> ,
+      <mark>PercentPipe</mark> &amp; <mark>SlicePipe</mark>
+    </p>
+
+    <div data-markdown>
+      <script type="text/template">
+      ```
+      <!-- json: renders a Javascript object in JSON. -->
+      <div>{{jsObject | json}}</div>
+
+      <!-- date: converts a date object into another format. -->
+      <div>{{today | date:"dd/MM/yyyy"}}</div>
+      ```
+      </script>
+    </div>
+
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <!-- slice extract from an array some elements -->
+      <div *ngFor="let contact of contacts | slice : page : page + itemsPerPage">
+        <!-- content here -->
+      </div>
+      ```
+      </script>
+    </div>
+
+    <p>Use <code>|</code> in template expression</p>
+    <p>Use <code>:</code> to add multiple parameters</p>
+  </section>
+
+  <section>
+    <h2>Chaining Pipes</h2>
+    <p>As unix pipes, angular pipes can be chained</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <!-- "2016-02-04T20:16:26+00:00" -->
+      <p>{{birthday | fullDate | uppercase}}</p>
+
+      <!-- Then:    "Feb 4th, 2016"  -->
+      <!-- Finally: "FEB 4TH, 2016"  -->
+      ```
+      </script>
+    </div>
+    <br>
+    <p>You're building a pipeline!</p>
+  </section>
+
+  <section>
+    <h2>Custom Pipes</h2>
+    <p>Use angular-cli to make a new custom pipe</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```bash
+      ng g pipe my-new-pipe
+      ```
+      </script>
+    </div>
+
+    <p>This will generate an empty pipe</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      import { Pipe, PipeTransform } from '@angular/core';
+
+      @Pipe({
+        name: 'myNewPipe'
+      })
+      export class MyNewPipePipe implements PipeTransform {
+        // You can now change the args? to put the parameters
+        // you need, return the type you want and make the
+        // transformation to return what you want
+
+        transform(value: any, args?: any): any {
+          return null;
+        }
+
+      }
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Change detection in Pipes</h2>
+    <p>Pipes are <mark>watching</mark> objects <mark>by reference</mark></p>
+    <br>
+    <p>So when array is watched and you push new items in it, the pipe will not be updated</p>
+  </section>
+
+  <section>
+    <h2>Impure Pipes</h2>
+
+    <p>Impure pipes are evaluated during <mark>each change detection</mark> pass</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      import { Pipe, PipeTransform } from '@angular/core';
+
+      @Pipe({
+        name: 'myNewPipe',
+        pure: false
+      })
+      export class MyNewPipePipe implements PipeTransform {
+        transform(value: any, args?: any): any {
+          return null;
+        }
+      }
+      ```
+      </script>
+    </div>
+    <p>Pure pipes should be preferred for performance reasons</p>
+  </section>
+
+  <section>
+    <h2>Async Pipe</h2>
+    <p>Useful pipe to deal with asynchronous data in the template</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        @Component({
+          template: '
+            <div *ngFor="let contact of contacts$ | async"> ... </div>
+
+            Total contacts: {{ (contacts$ | async)?.length }}
+          '
+        })
+        class ContactList {
+
+          @Input()
+          contacts$: Observable<Contact[]>;
+        }
+        ```
+      </script>
+    </div>
+    <br>
+    <p>More on that in the 'Advanced' part of the training</p>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Pipes</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Pipe is a simple transformation function</li>
+      <li>Pipes can be chained</li>
+      <li>Prefer pure pipes to impure ones</li>
+      <li>Avoid implementing complex pipes (FilterPipe, OrderByPipe, etc)</li>
+    </ul>
+  </section>
+
+</section>

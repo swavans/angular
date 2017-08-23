@@ -1,0 +1,313 @@
+<section
+  data-documentation-link="https://angular.io/docs/ts/latest/guide/template-syntax.html"
+>
+  <section data-slide-type="blue">
+    <h1>Template Syntax</h1>
+  </section>
+
+  <section>
+    <h2>Component Template</h2>
+    <h4>Inline or external</h4>
+    <p>Inline</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        @Component({
+          template: '<div>Hello World</div>'
+        })
+        ```
+      </script>
+    </div>
+    <p>External file</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        @Component({
+          templateUrl: './hello-world.component.html'
+        })
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>What can you have inside?</h2>
+    <br/>
+    <p>Interpolations</p>
+    <p>Attribute, property, class and style bindings</p>
+    <p>Event bindings</p>
+    <p>Template reference variables</p>
+    <p>Structural directives</p>
+  </section>
+
+  <section>
+    <h2>Interpolation</h2>
+    <h4>Model → View</h4>
+    <p>Display data in your template</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <!-- simple expressions -->
+      <span>{{ 2 + 2 }}</span>
+      <div>{{ contact.name }}</div>
+
+      <!-- some sugar on top -->
+      <div>{{ contacts?.length }}</div>
+
+      <!-- works for attributes too -->
+      <input type="text" placeholder="{{ textPlaceholder }}" />
+      ```
+      </script>
+    </div>
+    <br/>
+    <p>Not a Javascript expression</p>
+    <p>Evaluated against component instance</p>
+    <p>The expression should be idempotent</p>
+  </section>
+
+  <section>
+    <img src="img/tombstone.png" class="nobackground"/>
+    <div style="position: relative; bottom: 8em; right: 0.3em;">
+      <h3>$scope</h3>
+      <h3>controller</h3>
+    </div>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/template-syntax.html#!#html-attribute-vs-dom-property"
+  >
+    <h2>Attribute, Property bindings</h2>
+    <h4>Model → View</h4>
+    <p>Property</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <button type="button" [disabled]="isDisabled">Save</button>
+      ```
+      </script>
+    </div>
+    <p>Attribute</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <button [attr.aria-label]="helpLabel">Help</button>
+        ```
+      </script>
+    </div>
+    <br/>
+    <p>Know the difference between them</p>
+    <p><small>(see the link at bottom left corner)</small></p>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/template-syntax.html#!#other-bindings"
+  >
+    <h2>Class, Style bindings</h2>
+    <h4>Model → View</h4>
+    <p>Class</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <div [class.has-danger]="!name.valid"></div>
+        ```
+      </script>
+    </div>
+    <p>Style</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <!-- style -->
+        <p [style.color]="isSpecial ? 'red' : 'green'">Text</p>
+
+        <!-- some sugar on top -->
+        <div [style.width.%]="widthPercentage"></div>
+        <div [style.font-size.em]="fontSize"></div>
+        ```
+      </script>
+    </div>
+    <br/>
+    <p>Use <code>ngClass</code> or <code>ngStyle</code> for multiple values</p>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/template-syntax.html#!#event-binding"
+  >
+    <h2>Event Bindings</h2>
+    <h4>View → Model</h4>
+    <p>Handling native events</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <!-- handling click -->
+      <button type="button" (click)="onCreate()">Create</button>
+
+      <!-- getting the DOM event object -->
+      <input type="text" (input)="onInput($event.target.value)"/>
+      ```
+      </script>
+    </div>
+    <br/>
+    <p>No more directives per event type</p>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/template-syntax.html#!#ref-vars"
+  >
+    <h2>Template reference variable</h2>
+    <p>Reference a DOM element</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <!-- create a reference variable -->
+        <input #name type="text" />
+
+        <!-- use it -->
+        <button (click)="save(name.value)">Save</button>
+        ```
+      </script>
+    </div>
+    <br/>
+    <p>Scoped to the current template</p>
+  </section>
+
+  <section>
+    <h2>Two-way data Binding</h2>
+    <h4>Model ⟷ View</h4>
+    <p>We can DIY</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <input #n type="text"
+           [value]="contact.name" (input)="contact.name = n.value" />
+        ```
+      </script>
+    </div>
+    <br/>
+    <p>Use ngModel</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <input type="text" [(ngModel)]="contact.name" />
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <img src="img/bananas.jpg"/>
+    <br>
+    <p>Take a look at those bananas in the box!</p>
+  </section>
+
+  <section>
+    <h2><code>[()]</code></h2>
+    <h4>'banana in the box' syntax</h4>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<input type="text" [(ngModel)]="contact.name" />
+```
+      </script>
+    </div>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/structural-directives.html"
+  >
+    <h2>Structural directives</h2>
+    <h4>Manipulate DOM elements</h4>
+    <p><code>ngIf</code></p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <p *ngIf="contacts.length === 0">
+        No contacts yet
+      </p>
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/structural-directives.html"
+  >
+    <h2>Structural directives</h2>
+    <h4>Manipulate DOM elements</h4>
+    <p><code>ngFor</code></p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <div *ngFor="let contact of contacts">
+        <div>Name: {{contact.name}}</div>
+      </div>
+      ```
+      </script>
+    </div>
+    <p>Will generate</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <div>
+        <div>Name: Benoit</div>
+      </div>
+      <div>
+        <div>Name: Max</div>
+      </div>
+      ```
+      </script>
+    </div>
+
+  </section>
+
+  <section
+    data-documentation-link="https://angular.io/docs/ts/latest/guide/structural-directives.html#!#asterisk"
+  >
+    <h2>What is that <mark>* symbol</mark> doing there?</h2>
+    <h4>Template element</h4>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <!-- without 'template' element -->
+        <p *ngIf="!isHidden">Text</p>
+
+        <!-- with 'template' element -->
+        <ng-template [ngIf]="!isHidden">
+          <p>Text Paragraph</p>
+        </ng-template>
+        ```
+      </script>
+    </div>
+    <br/>
+    <p><a href="https://developer.mozilla.org/en/docs/Web/HTML/Element/template">https://developer.mozilla.org/en/docs/Web/HTML/Element/template</a></p>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Template syntax</h4>
+    <h2>Takeaways</h2>
+    <ul class="nobullet">
+      <li>Component has a template</li>
+      <li>Rich and powerful template syntax</li>
+      <li>One- and two-way bindings</li>
+      <li>ngFor, ngIf structural directives</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 02</h1>
+    <h3>Template Syntax</h3>
+    <br/>
+    <p>Create an <code>EditContact</code> component that will edit and validate contact details input</p>
+  </section>
+
+  <section>
+    <img src="/img/exercises/02.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 02</h1>
+    <h3>Template Syntax</h3>
+    <br>
+    <h1 timer="30"/>
+  </section>
+</section>

@@ -1,0 +1,29 @@
+<h4>Contacts</h4>
+
+<div class="container-fluid">
+  <div class="row" *ngFor="let editContact of editItemContacts">
+
+    <app-contact-card class="col-sm-8"
+         [hidden]="editContact.editing"
+         [contact]="editContact.item">
+    </app-contact-card>
+
+    <app-contact-editor class="col-sm-12"
+         (save)="onSave(editContact, $event)"
+         (cancel)="onCancel(editContact)"
+         [hidden]="!editContact.editing"
+         [contact]="editContact.item">
+    </app-contact-editor>
+
+    <div class="col-sm-4" [hidden]="editContact.editing">
+      <button type="button" class="btn btn-outline-primary"
+              (click)="editContact.editing = true">
+        edit
+      </button>
+      <button type="button" class="btn btn-outline-primary"
+              (click)="onRemove(editContact.item)">
+        remove
+      </button>
+    </div>
+  </div>
+</div>

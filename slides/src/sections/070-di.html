@@ -1,0 +1,182 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>DI &amp; services</h1>
+  </section>
+
+  <section>
+    <h2>Dependency Injection</h2>
+    <h4>bad idea</h4>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      class Laptop {
+
+        private cpu: Cpu;
+        private ram: Ram;
+
+        constructor() {
+          this.cpu = new SlowCpu();
+          this.ram = new SlowRam(8);
+        }
+      }
+
+      // create one
+      const laptop = new Laptop();
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Dependency Injection</h2>
+    <h4>better idea</h4>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      class Laptop {
+
+        constructor(
+          private cpu: Cpu,
+          private ram: Ram
+        ) { }
+      }
+
+      // create one
+      const laptop = new Laptop(new FastCpu(), new FastRam(32));
+      ```
+      </script>
+    </div>
+    <br/>
+    Do not manage own dependencies
+  </section>
+
+  <section>
+    <h2>Dependency Injection</h2>
+    <h4>tests</h4>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      class Laptop {
+
+        constructor(
+          private cpu: Cpu,
+          private ram: Ram
+        ) { }
+      }
+
+      class MockCpu implements Cpu { }
+      class MockRam implements Ram { }
+
+      // test one
+      let testLaptop = new Laptop(new MockCpu(), new MockRam());
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>DI with angular</h2>
+    <br/>
+    <ul class="nobullet">
+      <li><mark>What</mark> can we inject?</li>
+      <li><mark>Where</mark> can we inject it?</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><mark>What</mark> to inject</h2>
+    <br/>
+    <p>Pick a class</p>
+    <p>Stick and annotation onto it</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      import { Injectable } from '@angular/core';
+
+      @Injectable()
+      class ContactService { }
+      ```
+      </script>
+    </div>
+    <br/>
+    <p>Note the brackets in <code>@Injectable()</code></p>
+  </section>
+
+  <section>
+    <h2><mark>Where</mark> to inject</h2>
+    <br/>
+    <p>In the constructor</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      @Component({/* ... */})
+      class ContactList {
+        constructor(private service: ContactService) {
+        }
+      }
+      ```
+      </script>
+    </div>
+    <br/>
+    <p>But where does <code>ContactService</code> come from?</p>
+  </section>
+
+  <section>
+    <h2>Providers</h2>
+    <br/>
+    <p>There is a hierarchy or injectors (like components)</p>
+    <p>Every component has its own injector</p>
+    <br/>
+    <p>Component → only in component and all children</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      @Component({
+        providers: [ContactService]
+      })
+      class ContactList { }
+      ```
+      </script>
+    </div>
+    <p>Module → the whole application</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      @NgModule({
+        providers: [ContactService]
+      })
+      class SomeModule { }
+      ```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Dependency Injection</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Define what is injectable</li>
+      <li>Define where it should be available</li>
+      <li>Inject into constructor</li>
+      <li>Mock things for tests</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 06</h1>
+    <h3>Data service</h3>
+    <p>Externalize contact list management into a <code>ContactService</code> and inject it into relevant components</p>
+  </section>
+
+  <section>
+    <img src="/img/exercises/06.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 06</h1>
+    <h3>Data service</h3>
+    <br>
+    <h1 timer="40"></h1>
+  </section>
+</section>

@@ -1,0 +1,157 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Architecture</h1>
+  </section>
+
+  <section>
+    <h2>Application is a <mark>tree of components</mark></h2>
+  </section>
+
+  <section>
+    <h4>Component tree</h4>
+    <img src="img/diagrams/components.svg" class="nobackground" />
+  </section>
+
+  <section>
+    <h2>Application is a <mark>tree of components</mark></h2>
+    <ul>
+      <li>Isolated components</li>
+      <li>Clear APIs</li>
+      <li>Predictable one-way data flow</li>
+      <li>Dependency injection</li>
+      <li>Component-based routing</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Component</h2>
+    <p>A simple hello world component</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import { Component } from '@angular/core';
+
+        @Component({
+          selector: 'hello-world',
+          template: '<div>Hello {{ name }}</div>'
+        })
+        export class HelloWorldComponent {
+          name = 'Angular';
+        }
+        ```
+      </script>
+    </div>
+    <p>That can be used like this</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <hello-world></hello-world>
+        ```
+      </script>
+    </div>
+    <br/>
+    <p>Component is a <mark>class</mark> with the <mark>decorator</mark></p>
+  </section>
+
+  <section>
+    <h2>Modules are used to <mark>structure</mark> your application</h2>
+  </section>
+
+  <section>
+    <h4>Component tree with modules</h4>
+    <img src="img/diagrams/modules.svg" class="nobackground" />
+  </section>
+
+  <section>
+    <h2>Module</h2>
+    <p>A simple module with one component</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import { BrowserModule } from '@angular/platform-browser';
+        import { NgModule } from '@angular/core';
+        import { RootComponent } from './root.component';
+
+        @NgModule({
+          declarations: [RootComponent],
+          imports: [BrowserModule],
+          bootstrap: [RootComponent]
+        })
+        export class AppModule { }
+        ```
+      </script>
+    </div>
+    <br/>
+    <p>Once again a module is a <mark>class</mark> with the <mark>decorator</mark></p>
+  </section>
+
+  <section>
+    <h2>Bootstrapping</h2>
+    <p>The module application starts with is called the  <mark>root module</mark></p>
+    <p>It has the <mark>root component</mark> that you use on the main page</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+        import { AppModule } from './app/';
+
+        platformBrowserDynamic().bootstrapModule(AppModule);
+        ```
+      </script>
+    </div>
+    <p>index.html body would contain only</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <app-root>Loading</app-root>
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Export from a module</h2>
+    <p>Module's components can be used by <mark>other modules</mark></p>
+    <p>In this case you must <mark>export</mark> those components</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import { MyComponent } from './my.component';
+
+        @NgModule({
+          declarations: [MyComponent],
+          exports: [MyComponent] // Components you want to export
+        })
+        export class LibraryModule { }
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Import from a module</h2>
+    <p>You must <mark>import</mark> a module to use its components</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import { LibraryModule } from './library.module';
+
+        @NgModule({
+          imports: [LibraryModule] // Exported components will be available
+        })
+        export class AnotherModule { }
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Architecture</h4>
+    <h2>Takeaways</h2>
+    <ul class="nobullet">
+      <li>Application is a tree of components</li>
+      <li>Components are isolated and talk to each other</li>
+      <li>Module groups several components</li>
+    </ul>
+  </section>
+</section>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>NG Training - Slides</title>
+
+  <link rel="stylesheet" href="css/reveal.min.css">
+  <link rel="stylesheet" href="css/theme/amadeus.css">
+  <link rel="stylesheet" href="css/patches.css">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="css/highlight/atom-one-dark.css">
+  <!--<link rel="stylesheet" href="css/highlight/darcula.css">-->
+  <!--<link rel="stylesheet" href="css/highlight/zenburn.css">-->
+
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+</head>
+<body id="slide-show">
+<div class="reveal">
+  <div class="slides">
+    <section
+      data-slide-type="blue"
+      data-background-image="img/super-hero-large.png"
+      data-background-size="150%"
+      data-background-position="center bottom"
+    >
+      <h1>Angular</h1>
+      <h2>training</h2>
+      <img src="img/angular.png" class="nobackground"/>
+    </section>
+    <!-- slides are to be inserted here -->
+    <section data-slide-type="blue">
+      <h3>That's all folks</h3>
+      <h1>Thank You !</h1>
+    </section>
+  </div>
+
+  <div id="amadeus-audience"></div>
+  <div id="amadeus-copyright"></div>
+  <div id="amadeus-logo"></div>
+</div>
+
+<script src="js/head.min.js"></script>
+<script src="js/jquery-2.0.3.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/reveal.min.js"></script>
+<script src="js/amadeus.js"></script>
+
+<script>
+  // More info https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+
+    theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+    transition: Reveal.getQueryHash().transition || 'linear',
+
+    // More info https://github.com/hakimel/reveal.js#dependencies
+    dependencies: [
+      { src: 'plugin/markdown/marked.js' },
+      { src: 'plugin/markdown/markdown.js' },
+      { src: 'plugin/zoom-js/zoom.js', async: true },
+      { src: 'plugin/notes/notes.js', async: true },
+      {
+        src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+          hljs.initHighlightingOnLoad();
+        }
+      },
+      { src: 'plugin/timer/timer.js' },
+      {
+        src: 'plugin/doc-link/doc-link.js', callback: function() {
+          RevealDocLinks.init({
+            image: "/img/angular.png"
+          })
+        }
+      }
+    ]
+  });
+
+  // TODO: This should be moved to a dedicated Amadeus Reveal.js plugin
+  Reveal.addEventListener('slidechanged', function (event) {
+    manageCurrentSlide(event.currentSlide.getAttribute("data-slide-type"));
+  });
+
+  Reveal.addEventListener('ready', function (event) {
+    manageCurrentSlide(event.currentSlide.getAttribute("data-slide-type"));
+  });
+</script>
+</body>
+</html>

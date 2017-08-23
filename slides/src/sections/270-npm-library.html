@@ -1,0 +1,172 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Libraries</h1>
+  </section>
+
+  <section>
+    <h2>Configure your library</h2>
+    <h6>No bootstrap</h6>
+    There is <mark>no real bootstraping</mark> of the library as bootstraping is for the whole application. But you need to create <mark>different modules</mark> so that your library is easily usable.
+  </section>
+
+  <section>
+    <h2>Module configuration</h2>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import {NgModule, ModuleWithProviders} from '@angular/core';
+        import {CommonModule} from '@angular/common';
+        import {NgbPagination} from './pagination';
+        import {NgbPaginationConfig} from './pagination-config';
+        export {NgbPagination} from './pagination';
+        export {NgbPaginationConfig} from './pagination-config';
+
+        @NgModule({declarations: [NgbPagination], exports: [NgbPagination], imports: [CommonModule]})
+        export class NgbPaginationModule {
+          static forRoot(): ModuleWithProviders { return {ngModule: NgbPaginationModule, providers: [NgbPaginationConfig]}; }
+        }
+        ```
+      </script>
+    </div>
+    Every widget is available in his own NgModule that is defining the providers he will need.
+  </section>
+
+
+  <section>
+    <h2>Configure your library</h2>
+    <h6>Module aggregation</h6>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import {NgModule, ModuleWithProviders} from '@angular/core';
+        import {NgbDatepickerModule} from './datepicker/datepicker.module';
+        import {NgbPaginationModule} from './pagination/pagination.module';
+
+        const NGB_MODULES = [
+          NgbDatepickerModule, NgbPaginationModule
+        ];
+
+        @NgModule({
+          imports: [
+          NgbDatepickerModule.forRoot(),  NgbPaginationModule.forRoot()
+          ],
+          exports: NGB_MODULES
+        })
+        export class NgbRootModule {
+        }
+        @NgModule({imports: NGB_MODULES, exports: NGB_MODULES})
+          export class NgbModule {
+          static forRoot(): ModuleWithProviders { return {ngModule: NgbRootModule}; }
+        }
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section
+  data-documentation-link="https://medium.com/@isaacplmann/making-your-angular-2-library-statically-analyzable-for-aot-e1c6f3ebedd5#.arqiy8zi7">
+    <h2>Make you library statically analyzable</h2>
+  </section>
+
+  <section
+      data-documentation-link="https://angular.io/docs/ts/latest/cookbook/ngmodule-faq.html#!#q-for-root">
+    <h2>Why this forRoot?</h2>
+    <ul class="nobullet">
+      <li>The <mark>forRoot</mark> has to be used in the <mark>root module</mark> of your application</li>
+      <li>Why? To avoid side effect in lazy loading</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>TSC configuration 1</h2>
+    <ul class="nobullet">
+      <li><mark>emitDecoratorMetadata and experimentalDecorators</mark> enable the use of <mark>annotations</mark></li>
+      <li><mark>target</mark>: 'es5', the output is just <mark>plain Javascript</mark></li>
+      <li><mark>module</mark>: 'commonjs', each file will be exported as a <mark>separate</mark> CommonJs module.</li>
+    </ul>
+  </section>
+
+
+  <section>
+    <h2>TSC configuration 2</h2>
+    <ul class="nobullet">
+      <li><mark>moduleResolution</mark>: 'node', the import paths will work exactly the same way in the <mark>browser</mark> as in a <mark>node</mark> runtime</li>
+      <li><mark>outDir</mark> is where the output of the <mark>Typescript compiler</mark></li>
+      <li><mark>sourcemap</mark>: true triggers the generation of source maps</li>
+      <li><mark>declaration</mark>: true triggers the generation of the typings <mark>*.d.ts</mark> files</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Deployment</h2>
+    <ul class="nobullet">
+      <li>Files to be <mark>included</mark>: *.d.ts, *.metadata.json, *.js, *.map, package.json</li>
+      <li>Look at delivered files in <mark>ng-bootstrap</mark></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Why deploy JS files in different modules?</h2>
+    <ul class="nobullet">
+      <li>Ensure <mark>optimum</mark> results for the users (tree shaking)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Deploy bundled files</h2>
+    <ul class="nobullet">
+      <li>For users <mark>without</mark> a frontend build</li>
+      <li>Example: amaBootstrap</li>
+      <li>The <mark>amaBootstrap.css</mark> files (min and map) are delivered (and not the scss files).</li>
+    </ul>
+  </section>
+
+
+  <section
+  data-documentation-link="https://rndwww.nce.amadeus.net/git/projects/NG2/repos/amadeus-bootstrap4-theme/browse/.sf.yml?at=sfnpm">
+    <h2>Deploy in amadeus npm</h2>
+    <ul class="nobullet">
+      <li>Example: amaBootstrap</li>
+      <li>Look at .sf.yml, version.txt, package.json and .npm* files</li>
+    </ul>
+  </section>
+
+
+  <section
+  data-documentation-link="https://rndwww.nce.amadeus.net/confluence/pages/viewpage.action?pageId=88077501">
+    <h2>How to consume an amadeus widget library?</h2>
+    create a file named <mark>.npmrc</mark> for your project and target
+    <div data-markdown>
+      <script type="text/template">
+        ```bash
+        registry=https://repository.rnd.amadeus.net/api/npm/npm
+        ```
+      </script>
+    </div>
+    You can specify the target library by library
+      <div data-markdown>
+        <script type="text/template">
+          ```bash
+          amaBootstrap:registry=https://repository.rnd.amadeus.net/api/npm/npm
+          ```
+        </script>
+      </div>
+  </section>
+
+  <section>
+    <h2>How to consume an amadeus widget library?</h2>
+    Consume the package as a normal npm package. In package.json
+    <div data-markdown>
+      <script type="text/template">
+        ```bash
+        "devDependencies": {
+        "bootstrap": "^4.0.0-alpha.6",
+        "amaBootstrap": "1.2.2"
+        }
+        ```
+      </script>
+    </div>
+  </section>
+
+</section>
+

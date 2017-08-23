@@ -1,0 +1,263 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Forms</h1>
+  </section>
+
+  <section>
+    <h2><mark>Why</mark>Forms?</h2>
+    <br/>
+    <ul class="nobullet">
+      <li>Handle and validate data input</li>
+      <li>Provide feedback to the user in case of errors</li>
+      <li>Bind existing inputs and components to the model</li>
+      <li>Organize form parts logically into groups</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Building blocks</h2>
+    <h4>Form control</h4>
+    <ul class="nobullet">
+      <li>Holds a value</li>
+      <li>Handles validation</li>
+      <li>Provides events (ex. value changes)</li>
+    </ul>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        const lastName = new FormControl('', Validators.required);
+
+        lastName.value;   // ''
+        lastName.status;  // INVALID
+        lastName.valid;   // false
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Building blocks</h2>
+    <h4>Form group</h4>
+    <ul class="nobullet">
+      <li>An aggregation of form controls</li>
+      <li>Same functionality as the form control</li>
+    </ul>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        const form = new FormGroup({
+          firstName: new FormControl(''),
+          lastName: new FormControl('', Validators.required)
+        });
+
+        form.value;   // {firstName: '', lastName: ''}
+        form.status;  // INVALID
+
+        form.setValue({firstName: 'Bob', lastName: 'Mavromoustakos'});
+        form.status; // VALID
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Building blocks</h2>
+    <h4>Form array</h4>
+    <ul class="nobullet">
+      <li>An aggregation of form controls</li>
+      <li>Great when adding controls dynamically</li>
+    </ul>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        const array = new FormArray([
+          new FormControl('ONE'),
+          new FormControl('TWO')
+        ]);
+
+        array.value;   // ['ONE', 'TWO']
+        array.status;  // VALID
+
+        array.push(new FormControl('THREE'));
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Two Form flavours</h2>
+    <br/>
+    <table style="margin: 0 auto; width: 100%" >
+      <tr>
+        <td style="width: 30%"></td>
+        <td style="width: 40%"><h4>Template-driven</h4></td>
+        <td><h4>Reactive</h4></td>
+      </tr>
+      <tr>
+        <td>Module</td>
+        <td>FormsModule</td>
+        <td>ReactiveFormsModule</td>
+      </tr>
+      <tr>
+        <td>Control creation</td>
+        <td>Implicit</td>
+        <td>Explicit</td>
+      </tr>
+      <tr>
+        <td>Source of truth</td>
+        <td>Template</td>
+        <td>Component</td>
+      </tr>
+      <tr>
+        <td>Behavour</td>
+        <td>Async</td>
+        <td>Sync <br><br></td>
+      </tr>
+      <tr>
+        <td>Main directives</td>
+        <td><code>ngForm ngModel ngModelGroup</code></td>
+        <td><code>formControl formControlName formGroup formGroupName</code></td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Template-driven</h2>
+    <h4>Example</h4>
+    <div data-markdown>
+      <script type="text/template">
+```html
+<form #f="ngForm" novalidate>
+  <input type="text" name="firstName" [(ngModel)]="contact.firstName"
+         #fn="ngModel" required>
+</form>
+
+<pre>{{ f.value | json }}</pre>
+<pre>{{ f.valid | json }}</pre>
+<pre>{{ fn.valid | json }}</pre>
+<pre>{{ fn.errors | json }}</pre>
+```
+      </script>
+    </div>
+    <br>
+    <p>Create controls and validators in the template using directives</p>
+  </section>
+
+  <section>
+    <h2>Reactive</h2>
+    <h4>Example</h4>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      @Component({/* ... */})
+      class EditContactComponent {
+        form: FormGroup;
+        constructor(public fb: FormBuilder) {
+          this.form = fb.group({ firstName: ['', Validators.required] });
+        }
+      }
+      ```
+      </script>
+    </div>
+    <p>Template</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```html
+      <form [formGroup]="form" novalidate>
+        <input type="text" formControlName="firstName">
+      </form>
+
+      <pre>{{ form.value | json }}</pre>
+      <pre>{{ form.valid | json }}</pre>
+      <pre>{{ form.get('firstName').value | json }}</pre>
+      <pre>{{ form.get('firstName').errors | json }}</pre>
+      ```
+      </script>
+    </div>
+    <br>
+    <p>Create controls in the component and reference them from the template</p>
+  </section>
+
+  <section>
+    <h2>Importing forms</h2>
+    <br/>
+    <p>Both forms modules are in the <code>'@angular/forms'</code></p>
+    <br/>
+    <ul class="nobullet">
+      <li>The template-driven is <code>FormsModule</code></li>
+      <li>The reactive is <code>ReactiveFormsModule</code></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Form states with ngModel</h2>
+    <br/>
+    <table style="margin: 0 auto; width: 100%" >
+      <tr>
+        <td style="width: 50%"><h4>State</h4></td>
+        <td style="width: 25%"><h4>Class if True</h4></td>
+        <td><h4>Class if False</h4></td>
+      </tr>
+      <tr>
+        <td>The control has been visited.</td>
+        <td>ng-touched</td>
+        <td>ng-untouched</td>
+      </tr>
+      <tr>
+        <td>The control's value has changed.</td>
+        <td>ng-dirty</td>
+        <td>ng-pristine</td>
+      </tr>
+      <tr>
+        <td>The control's value is valid.</td>
+        <td>ng-valid</td>
+        <td>ng-invalid</td>
+      </tr>
+    </table>
+    <br/>
+    Use the class in your CSS to custom the look
+    <div data-markdown>
+      <script type="text/template">
+        ```CSS
+        .ng-valid[required], .ng-valid.required  {
+          border-left: 5px solid #green;
+        }
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Forms</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Forms handle data and validate it</li>
+      <li>Forms bind model to UI controls</li>
+      <li>Template-driven forms: ngForm, ngModel</li>
+      <li>Reactive forms: formGroup, formControl</li>
+      <li>Not in the core framework</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 09</h1>
+    <h3>Forms</h3>
+    <p>Modify the <code>EditContact</code> component to use one of the form flavours</p>
+    <ul class="nobullet">
+      <li><mark>09a</mark> - template-driven</li>
+      <li><mark>09b</mark> - reactive</li>
+    </ul>
+  </section>
+
+  <section>
+    <img src="/img/exercises/09.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 09</h1>
+    <h3>Forms</h3>
+    <br>
+    <h1 timer="30"></h1>
+  </section>
+</section>

@@ -1,0 +1,407 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Reactive</h1>
+    <h2>Programming</h2>
+  </section>
+
+  <section>
+    <img src="/img/stream.jpeg"/>
+  </section>
+
+  <section>
+    <h2><mark>Reactive</mark> Programming</h2>
+    <br>
+    <p>... is a programming with <b>asynchronous data streams</b> and <b>some tools on top</b></p>
+    <br>
+    <a href="https://gist.github.com/staltz/868e7e9bc2a7b8c1f754">The introduction you've been missing</a>
+  </section>
+
+  <section>
+    <h2>Everything is a Stream</h2>
+    <h4>Concepts</h4>
+    <br>
+    <ul>
+      <li>Stream of events (clicks, requests, actions, anything!)</li>
+      <li>Delivered asynchronously over time</li>
+      <li>One can listen to this stream (subscribe to it)</li>
+      <li>And transform one stream into a different one (with operations)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Marble Diagrams</h2>
+    <img src="/img/marbles.png"/>
+    <p>Stream, events, completion, operators</p>
+    <a href="http://rxmarbles.com/">Rx Marbles</a>
+  </section>
+
+  <section>
+    <h2>Reactive Extensions</h2>
+    <img src="/img/rxjs-logo.png" class="nobackground" width="300px"/>
+    <br>
+    <br>
+    <a href="http://reactivex.io/">RxJS library</a>
+  </section>
+
+  <section>
+    <h2>Observer</h2>
+    <h4>classic pattern</h4>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+// Subject of observation
+class Observable {
+  observers: Observer[];
+
+  register(o: Observer);
+  unregister(o: Observer);
+
+  notifyAll();
+}
+
+// Observer itself
+interface Observer {
+  notify(data);
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Iterator</h2>
+    <h4>classic pattern</h4>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+// Iterator itself
+interface Iterator<T> {
+  next(): T;
+  hasNext(): boolean;
+}
+
+// Some iterable collection
+class ListOfNumbers implements Iterable<number> {
+  numbers: number[];
+
+  iterator(): Iterator<number> {
+      return new NumberListIterator();
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Observables</h2>
+    <h4>Observers + Iterators</h4>
+    <br>
+    <p>Basically an asynchronous iterable stream one can observe</p>
+    <br>
+    <ul>
+      <li>subscribe/unsubscribe</li>
+      <li>get next piece of data</li>
+      <li>know when data ends</li>
+      <li>know when error happens</li>
+      <li>operations as in iterables: map, filter, etc</li>
+      <li>can cancel an observable</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Observable</h2>
+    <h4>With Observer</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+interface Observer {
+  onNext(value);
+  onError(error);
+  onDone();
+}
+
+interface Observable {
+
+  subscribe(o: Observer);
+
+  next(value);
+
+  // a bunch of operators
+  map();
+  filter();
+  // ...
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Observable</h2>
+    <h4>With 3 callbacks</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+interface Observable {
+
+  subscribe(
+    onNext?: (value) => void,
+    onError?: (error) => void,
+    onDone?: () => void
+  );
+
+  next(value);
+
+  // a bunch of operators
+  map();
+  filter;
+  // ...
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>DEMO</h1>
+    <br>
+    <h2>Let's <mark>Play</mark> with Observables</h2>
+  </section>
+
+  <section>
+    <div style="display: flex; justify-content: space-around">
+      <div>
+        <h2>Cold</h2>
+        <h4>observable</h4>
+        <p>Run upon subscription</p>
+        <div data-markdown style="width: 110%">
+          <script type="text/template">
+```typescript
+// cold
+let o$ = Observable.interval(100);
+
+
+
+
+// subscribe in 1 second
+o$.subscribe(...); // 0, 1, 2, ...
+```
+          </script>
+        </div>
+        <br>
+        <small>Think of a 'movie at home'</small>
+      </div>
+      <div>
+        <h2><mark>Hot</mark></h2>
+        <h4>observable</h4>
+        <p>Waits for subscriptions</p>
+        <div data-markdown style="width: 110%">
+          <script type="text/template">
+```typescript
+// hot
+let o$ = Observable.interval(100).publish();
+
+// start producing
+o$.connect();
+
+// subscribe in 1 second
+o$.subscribe(...); // 9, 10, 11, ...
+```
+          </script>
+        </div>
+        <br>
+        <small>Think of a 'live stream'</small>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Subjects</h2>
+    <br>
+    <p>Observables don't actually have the <code>next()</code> method</p>
+    <br>
+    <ul class="nobullet">
+      <li><code>Subject</code> - simplest; emits nothing upon subscription</li>
+      <li><code>BehaviorSubject</code> - has initial value; emits last value</li>
+      <li><code>ReplaySubject</code> - replays all values from the beginning</li>
+      <li><code>AsyncSubject</code> - for one-shot async operations</li>
+    </ul>
+    <br>
+    <br>
+    <p>Use Observables, not Subjects for your APIs</p>
+    <p>Subjects are 'hot'</p>
+  </section>
+
+  <section>
+    <h2>Operators</h2>
+    <h4>~100+ in RxJS</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+// 0, 1, 2, 30, ...
+const numbers$ = ... ;
+
+// 0, 10, 20, 30, 40, ...
+const mapped$ = numbers$.map(n => n * 10);
+
+// 20, 30, 40, ...
+const filtered$ = mapped$.filter(n => n > 10);
+
+// 20, 30, done!
+const limited$ = filtered$.take(2);
+```
+      </script>
+    </div>
+    <br>
+    <a href="https://github.com/ReactiveX/rxjs/tree/master/src/operator">List of operators in RxJS</a>
+  </section>
+
+  <section>
+    <h2>Form Control</h2>
+    <h4>Example</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({
+  template: `<input type="text" [formControl]="text" />`
+})
+class Component implements OnInit {
+
+  input = new FormControl();
+
+  ngOnInit() {
+    this.input.valueChanges
+    .map(x => x.toUpperCase())
+    .filter(x => x !== 'Q')
+    .subscribe(
+      x => console.log(x),
+      e => console.err(e),
+      () => console.log('done')
+    );
+  }
+}
+```
+      </script>
+    </div>
+    <br>
+    <p>Also has <code>stateChanges</code> stream</p>
+  </section>
+
+  <section>
+    <h2>Event Streams</h2>
+    <h4>Example</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({
+  template: `<button (click)="clicks$.next($event)"></button>`
+})
+class Component implements OnInit {
+
+  clicks$ = new Subject();
+
+  ngOnInit() {
+    this.clicks$
+      .subscribe(
+        x => console.log(x),
+        e => console.err(e),
+        () => console.log('done')
+      );
+  }
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>DEMO</h1>
+    <br>
+    <h2>Let's create a <mark>Typeahead</mark></h2>
+    <br>
+    <a href="https://ng-bootstrap.github.io/#/components/typeahead">ng-bootstrap Typeahead</a>
+  </section>
+
+  <section>
+    <h2>Components</h2>
+    <h4>Input observables</h4>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({
+  template: `<div *ngFor="let c of contacts$ | async">...</div>`
+})
+class Component {
+
+  @Input()
+  contacts$: Observable<Contact[]>;
+
+}
+```
+      </script>
+    </div>
+    <ul class="nobullet">
+      <li>Use async pipes</li>
+      <li>Change detection optimization!</li>
+      <li>Issues with multiple bindings</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Event Emitters</h2>
+    <h4>It's just a subject...</h4>
+    <p>You already use them all the time...</p>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+@Component({
+  template: `<button (click)="onClick($event)">Click me</button>`
+})
+class Component {
+
+  @Output()
+  clicks = new EventEmitter<string>(isAsync);
+
+  onClick(event) {
+    this.clicks.emit('clicked'); // use the usual 'emit'
+    this.clicks.next('clicked'); // or 'next' as in Subject
+  }
+
+}
+```
+      </script>
+    </div>
+    <ul class="nobullet">
+      <li>EventEmitters are special Subjects</li>
+      <li>Can be asynchronous</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Common issues</h2>
+    <br>
+    <ul class="nobullet">
+      <li><h4>1. Forgetting to subscribe</h4></li>
+      <li><h4>2. Forgetting to unsubscribe (leaks)</h4></li>
+      <li><h4>3. Async filters in templates</h4></li>
+      <li><h4>4. Router resolve needs completed observable</h4></li>
+    </ul>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Observables</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Everything is a stream :)</li>
+      <li>Learn reactive programming</li>
+      <li>Observable iterable stream</li>
+      <li>A ton of operators</li>
+      <li></li>
+    </ul>
+  </section>
+
+</section>

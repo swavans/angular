@@ -1,0 +1,226 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Life of a component</h1>
+  </section>
+
+  <section>
+    <h2>Isolated component</h2>
+    <img src="/img/diagrams/component-io-1.svg" class="nobackground" width="70%"/>
+    <br/>
+    <p>No scope anymore, standard JS classes</p>
+  </section>
+
+  <section>
+    <h2>Isolated component</h2>
+    <img src="/img/diagrams/component-io-2.svg" class="nobackground" width="50%"/>
+  </section>
+
+  <section>
+    <h2>Isolated component</h2>
+    <h4>@Input</h4>
+    <p>Pass data to child component via the <code>[]</code> binding</p>
+    <div data-markdown>
+      <script type="text/template">
+      ```typescript
+      @Component({/* ... */})
+      class ContactList {
+
+        @Input()
+        contacts: Contact[] = [];
+      }
+      ```
+      </script>
+    </div>
+    <p>Parent Template</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <contact-list [contacts]="[c1, c2, c3]"></contact-list>
+        <contact-list [contacts]="contacts"></contact-list>
+        ```
+      </script>
+    </div>
+    <br/>
+    <p>Note the brackets in <code>@Input()</code></p>
+  </section>
+
+  <section>
+    <h2>Isolated component</h2>
+    <h4>@Output</h4>
+    <p>Pass data to parent component via the <code>()</code> binding</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        @Component({/* ... */})
+        class ContactList {
+
+          @Output()
+          remove = new EventEmitter<Contact>();
+
+          // somewhere later in one of methods
+          this.remove.emit(contact);
+        }
+        ```
+      </script>
+    </div>
+    <p>Parent Template</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <contact-list (remove)="onRemove($event)"></contact-list>
+        ```
+      </script>
+    </div>
+    <br/>
+    <p><code>$event</code> payload contains the contact object</p>
+  </section>
+
+  <section>
+    <h2>Isolated component</h2>
+    <h4>Private data</h4>
+    <p>Use typescript private variables and methods</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        @Component({/* ... */})
+        class ContactList {
+
+          private secretData = 42;
+
+          private secretMethod() {
+            return this.secretData + 1;
+          }
+        }
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Isolated component</h2>
+    <h4>Two-way binding</h4>
+    <p>Can be done using the 'change' naming convention</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        @Component({/* ... */})
+        class RatingComponent {
+
+          @Input()
+          rate: number;
+
+          @Output()
+          rateChange = new EventEmitter<number>();
+        }
+        ```
+      </script>
+    </div>
+    <p>Parent Template</p>
+    <div data-markdown>
+      <script type="text/template">
+        ```html
+        <rating [(rate)]="rate"></rating>
+        ```
+      </script>
+    </div>
+    <br/>
+    <p>Remember 'banana in the box' <code>[()]</code></p>
+  </section>
+
+  <section data-documentation-link="https://angular.io/docs/ts/latest/guide/lifecycle-hooks.html">
+    <h2>Lifecycle</h2>
+    <h4>(Simplified version)</h4>
+    <br/>
+    <p><mark class="blue">Construction</mark></p>
+    <p>↓</p>
+    <p><mark class="blue">Initialization</mark></p>
+    <p>↓</p>
+    <p>⟳ <mark class="blue">Change detection</mark> ⟳</p>
+    <p>↓</p>
+    <p><mark class="blue">Destruction</mark></p>
+  </section>
+
+  <section data-documentation-link="https://angular.io/docs/ts/latest/guide/lifecycle-hooks.html">
+    <h2>Lifecycle</h2>
+    <h4>Example</h4>
+    <div data-markdown><script type="text/template">
+      ```typescript
+      @Component({/* ... */})
+      class SampleComponent implements OnInit, OnChanges, OnDestroy {
+
+        // inject dependencies here
+        constructor() { }
+
+        // use values from @Inputs to initalize data
+        ngOnInit() { }
+
+        // get notified when any of the @Inputs changes
+        ngOnChanges(changes: SimpleChanges) { }
+
+        // clean up after yourself
+        ngOnDestroy() { }
+      }
+      ```
+    </script>
+    </div>
+  </section>
+
+  <section
+    data-documentation-link="https://github.com/angular/zone.js/"
+  >
+    <h2>Change detection</h2>
+    <h4>Quick Overview</h4>
+    <br/>
+    <p>It makes sense to re-render UI only when <mark>something happens</mark></p>
+    <br/>
+    <ul>
+      <li>DOM events (clicks, inputs, etc)</li>
+      <li>Timers and intervals</li>
+      <li>XHR</li>
+    </ul>
+    <br/>
+    <br/>
+    <p>Angular uses <mark>Zones</mark> to be notified when something happens</p>
+  </section>
+
+  <section>
+    <h2>Change detection</h2>
+    <h4>Quick Overview</h4>
+    <br/>
+    <ul>
+      <li>Triggered by the zone callback</li>
+      <li>Each component has its own change detector</li>
+      <li>Change detector checks all template bindings for changes</li>
+      <li>Starts from root component down</li>
+      <li>Walks component tree only once (no stabilization)</li>
+    </ul>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Life of a component</h4>
+    <h2>Takeaways</h2>
+    <br/>
+    <ul class="nobullet">
+      <li>Components are isolated</li>
+      <li>They talk to each other via @Inputs and @Outputs</li>
+      <li>Components have lifecycle hooks</li>
+      <li>Angular detects when @Inputs and template bindings change</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Exercise 03</h1>
+    <h3>Component communication</h3>
+  </section>
+
+  <section>
+    <img src="/img/exercises/03.svg" class="nobackground"/>
+  </section>
+
+  <section data-slide-type="yellow">
+    <h1>Exercise 03</h1>
+    <h3>Component communication</h3>
+    <br>
+    <h1 timer="40"></h1>
+  </section>
+</section>

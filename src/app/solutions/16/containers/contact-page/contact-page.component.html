@@ -1,0 +1,20 @@
+<div class="form-group d-flex">
+  <input appContactFilter [value]="filter$ | async" (text)="onFilter($event)" type="text" class="form-control" placeholder="Filter contacts">
+  <a role="button" href="" class="btn btn-primary ml-3" routerLink="../create">New Contact</a>
+</div>
+
+<app-contact-list
+  [contacts]="contacts$ | async"
+  (edit)="onEdit($event)"
+  (remove)="onRemove($event)">
+</app-contact-list>
+
+<!-- TODO: bind current page to pagination component -->
+<ngb-pagination class="d-flex justify-content-center"
+                ex-start
+                [page]="page$ | async"
+                ex-end
+                (pageChange)="onPageChange($event)"
+                [collectionSize]="collectionSize$ | async"
+                [pageSize]="pageSize$ | async">
+</ngb-pagination>

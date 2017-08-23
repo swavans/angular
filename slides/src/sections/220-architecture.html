@@ -1,0 +1,182 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Architecture</h1>
+  </section>
+
+  <section>
+    <h2>What is <mark>architecture</mark></h2>
+    <br/>
+    <p>Expert developers shared understanding of the system design</p>
+    <p>Stuff that's very hard to change</p>
+    <br>
+    <p>Internal project quality. Complexity of adding new features</p>
+    <br>
+    <a href="https://www.youtube.com/watch?v=DngAZyWMGR0">'Making architecture matter' talk</a>
+  </section>
+
+  <section>
+    <h2>Web evolution</h2>
+    <h4>From HTML pages to SPA's</h4>
+    <p>Collection of HTML pages and links</p>
+    <p>↓</p>
+    <p>CSS and JavaScript</p>
+    <p>↓</p>
+    <p>Session and dynamic pages with PHP, JSP, etc</p>
+    <p>↓</p>
+    <p>AJAX and XHR</p>
+    <p>↓</p>
+    <p>Single Page Applications</p>
+  </section>
+
+  <section>
+    <h2>Layers</h2>
+    <h4>Peeling the onion</h4>
+    <img src="/img/diagrams/layers.svg" class="nobackground" style="width: 70%"/>
+  </section>
+
+  <section>
+    <h2>Angular building blocks</h2>
+    <br>
+    <p>Types, Interfaces</p>
+    <p>Modules</p>
+    <p>Components</p>
+    <p>Services and DI</p>
+  </section>
+
+  <section data-documentation-link="https://www.typescriptlang.org/docs/handbook/interfaces.html">
+    <h2>Welcome to the <mark>Java</mark> world</h2>
+    <h4>brought to you by TypeScript</h4>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+interface Server {
+  getStuff(params: Params): Stuff;
+}
+
+type Position = 'top' | 'bottom';
+
+enum Color {Pink, Lime, Malachite, Fuchsia}
+
+function copyStuff<T extends S, S>(target: T, source: S): T { ... }
+```
+      </script>
+    </div>
+    <br>
+    <a href="https://www.typescriptlang.org/docs/handbook/interfaces.html">TypeScript Handbook</a>
+  </section>
+
+  <section data-documentation-link="https://www.typescriptlang.org/docs/handbook/interfaces.html">
+    <h2>No, Like really <mark>Java</mark> world</h2>
+    <h4>brought to you by TypeScript</h4>
+    <br>
+    <div data-markdown>
+      <script type="text/template">
+```typescript
+class ComponentFactory<C> {
+
+  private _viewClass: Type<AppView<any>>;
+
+  constructor(
+    public selector: string, _viewClass: Type<AppView<any>>, public componentType: Type<any>) {
+      this._viewClass = _viewClass;
+    }
+
+    // ...
+}
+```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Modules</h2>
+    <br>
+    <ul>
+      <li>Split code into logical parts</li>
+      <li>Create a reusable library</li>
+      <li>A compilation unit</li>
+      <li>Bundling and Lazy Loading</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Components</h2>
+    <img src="/img/diagrams/component-types.svg" class="nobackground" style="width: 90%"/>
+    <p>Root, Router, Smart, Dumb</p>
+  </section>
+
+  <section>
+    <h2>Component Types</h2>
+    <h4>Dumb</h4>
+    <br>
+    <ul>
+      <li>Leaves of the component tree</li>
+      <li>Don't have any logic</li>
+      <li>Fully defined by their bindings</li>
+      <li>As many as possible</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Component Types</h2>
+    <h4>Smart</h4>
+    <br>
+    <ul>
+      <li>As high in the component tree as possible </li>
+      <li>Have some kind of state and use services</li>
+      <li>As few as possible</li>
+      <li>Orchestrate dumb components</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Component Types</h2>
+    <h4>Router</h4>
+    <br>
+    <ul>
+      <li>Highest level components</li>
+      <li>Handle navigation, data injection</li>
+      <li>Application entry points</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Services and Data Flow</h2>
+    <h4>(In the next section)</h4>
+    <br>
+    <p>How does it all fit together?</p>
+  </section>
+
+  <section>
+    <h2><mark>Rules</mark> of the game</h2>
+    <br>
+    <ul>
+      <li>Think about layers and growth</li>
+      <li>Enforce rules, be consistent</li>
+      <li>Define simple APIs (Components, Layers)</li>
+      <li>Use dumb and smart components</li>
+      <li>Move logic and processing to services</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>You'll have to <mark>rewrite</mark> your projects</h2>
+    <h4>It's part of the job</h4>
+    <br>
+    <p>There is no one solution to rule them all</p>
+  </section>
+
+  <section data-slide-type="pink">
+    <h4>Architecture</h4>
+    <h2>Takeaways</h2>
+    <br>
+    <ul class="nobullet">
+      <li>Architecture is the 'important stuff'</li>
+      <li>Modules, components, services and typescript</li>
+      <li>Split components into Smart, Dumb and Router</li>
+      <li>Plan for refactoring</li>
+    </ul>
+  </section>
+
+</section>

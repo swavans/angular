@@ -1,0 +1,250 @@
+<section>
+  <section data-slide-type="blue">
+    <h1>Optimize your application</h1>
+  </section>
+
+  <section>
+    <h2>The optimization solutions</h2>
+    <ul class="nobullet">
+      <li>1) The <mark>bundling</mark>: minification and compression</li>
+      <li>2) The <mark>tree-shaking</mark>: remove unused part</li>
+      <li>3) The <mark>Ahead of time compilation</mark> (Aot): compile templates</li>
+      <li>4) The <mark>Lazy</mark> loading: divide your app</li>
+      <li>5) The <mark>pre-rendering</mark>: generate server side</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The optimization tools</h2>
+    <ul class="nobullet">
+      <li><mark>Webpack</mark>: do all from 1 to 5</li>
+      <li><mark>Rollup</mark>: stop at step 3 Aot</li>
+      <li><mark>Angular-cli</mark> is using Webpack behind the scene</li>
+      <li><mark>Closure</mark> compiler: the future to do it all?</li>
+    </ul>
+  </section>
+
+  <section
+      data-documentation-link="https://github.com/ExFlo/angular2-simple-build"
+  >
+    <h2>Bundling</h2>
+    <ul class="nobullet">
+      <li>Clone and <mark>evaluate</mark> the bundle size, minified and gzip</li>
+      <li><mark>Tools</mark>: TypeScript Compiler (tsc), browserify, uglifyjs, gzip</li>
+    </ul>
+    <img src="/img/diagrams/Optimizing-bundling-flow.svg" class="nobackground"/>
+  </section>
+
+  <section
+      data-documentation-link="https://github.com/ExFlo/angular2-rollup-build"
+  >
+    <h2>Tree Shaking</h2>
+    <ul class="nobullet">
+      <li>Evaluate the <mark>tree-shaking</mark> effect with <mark>rollup</mark></li>
+    </ul>
+    <hr/>
+    TODO add diagram
+  </section>
+
+  <section>
+    <h2>Aot 1</h2>
+    <h6>What is it?</h6>
+    <ul class="nobullet">
+      <li>Transformation of all <mark>templates</mark> into compiled <mark>JS</mark> files</li>
+      <li>using a <mark>Compiler</mark>: ngc</li>
+      <li>(Available in <mark>@ngtools</mark> package)</li>
+    </ul>
+    <hr/>
+    TODO add diagram
+  </section>
+
+
+  <section>
+    <h2>Aot 2</h2>
+    <h6>Why?</h6>
+    <ul class="nobullet">
+      <li><mark>Save</mark> compilation <mark>time</mark> on front end side. </li>
+      <li>Allow to <mark>remove</mark> the angular <mark>compiler</mark> from the bundle</li>
+      <li>Catch template <mark>errors</mark> earlier</li>
+      <li><mark>Warning!</mark> The compilation generates a <mark>lot</mark> of code</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Aot in practice</h2>
+    <ul class="nobullet">
+      <li>The Aot compiler need a <mark>configuration</mark></li>
+      <li>Config will have entries, options, outputs</li>
+      <li>Your application need a <mark>new bootstrapping</mark></li>
+    </ul>
+    <h6>From</h6>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+        import {AppModule} from './module';
+        platformBrowserDynamic().bootstrapModule(AppModule);
+        ```
+      </script>
+    </div>
+    <hr />
+    <h6>To</h6>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        import {platformBrowser} from '@angular/platform-browser';
+        import {AppModuleNgFactory} from './module.ngfactory';
+        platformBrowser().bootstrapModuleFactory(AppModuleNgFactory);
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <h2>Dynamic generation and Aot</h2>
+    <ul class="nobullet">
+      <li>Component created dynamically are <mark>NOT</mark> in the <mark>main</mark> template tree</li>
+      <li>You need to precise <mark>all</mark> entry points of the templates</li>
+    </ul>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        @NgModule({
+        declarations: [NgbModalContainer, NgbModalBackdrop, NgbModalWindow],
+        entryComponents: [NgbModalBackdrop, NgbModalWindow],
+        providers: [NgbModal],
+        exports: [NgbModalContainer]
+        })
+        export class NgbModalModule {
+        static forRoot(): ModuleWithProviders { return {ngModule: NgbModalModule, providers: [NgbModal, NgbModalStack]}; }
+        }
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section
+      data-documentation-link="https://github.com/ExFlo/angular2-ngc-rollup-build"
+  >
+    <h2>Aot bundle results with rollup</h2>
+    <ul class="nobullet">
+      <li><mark>Evaluate</mark> the Aot effect with ngc and rollup</li>
+    </ul>
+  </section>
+
+  <section
+      data-documentation-link="https://github.com/ExFlo/angular2-aot-webpack"
+  >
+    <h2>Aot bundle results with webpack</h2>
+    <ul class="nobullet">
+      <li>See configuration and compilation options</li>
+      <li>Use <mark>source-map-explorer</mark> to see effects</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Lazy loading</h2>
+    <h6>What is it?</h6>
+    <ul class="nobullet">
+      <li>You <mark>divide</mark> you application in multiple bundles</li>
+      <li>Parts that you <mark>load</mark> only when <mark>needed</mark></li>
+    </ul>
+    <hr/>
+    <h6>Why?</h6>
+    <mark>Reduce</mark> the first bundle size
+    <hr/>
+    TODO add diagram
+  </section>
+
+  <section
+  data-documentation-link="https://github.com/mlaval/optimize-angular-app">
+    <h2>Lazy loading</h2>
+    <h6>Linked to routing</h6>
+    <h6>From</h6>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        const appRoutes: Routes = [
+        {path: '', component: Welcome},
+        {path: 'list', component: List},
+        {path: 'subscribe', component: Subscribe},
+        {path: 'search', component: Search}];
+        ```
+      </script>
+    </div>
+    <hr/>
+    <h6>To</h6>
+        <div data-markdown>
+          <script type="text/template">
+            ```typescript
+            const appRoutes: Routes = [
+            {path: '', component: Welcome},
+            {path: 'list', loadChildren: './list/list.module#ListModule'},
+            {path: 'subscribe', loadChildren: './subscribe/subscribe.module#SubscribeModule'},
+            {path: 'search', loadChildren: './search/search.module#SearchModule'}];
+            ```
+          </script>
+        </div>
+  </section>
+
+  <section
+      data-documentation-link="https://github.com/mlaval/optimize-angular-app">
+    <h2>Lazy loading: the tsc configuration</h2>
+    <div data-markdown>
+      <script type="text/template">
+        ```typescript
+        "files": [
+        "./app/module.lazy.ts",
+        "./app/list/list.module.ts",
+        "./app/search/search.module.ts",
+        "./app/subscribe/subscribe.module.ts"
+        ]
+        ```
+      </script>
+    </div>
+  </section>
+
+  <section
+      data-documentation-link="https://github.com/angular/universal">
+    <h2>Pre-rendering, what is it?</h2>
+    <ul class="nobullet">
+      <li>You generate <mark>server side</mark> the pages of your application</li>
+    </ul>
+    <hr/>
+    TODO add diagram
+  </section>
+
+  <section
+  data-documentation-link="https://cli.angular.io/reference.pdf">
+    <h2>Packaging with angular-cli</h2>
+    <ul class="nobullet">
+      <li>Angular-cli gives you compilation <mark>options</mark> to do all</li>
+      <li>It <mark>hides</mark> the different configurations</li>
+      <li>It is an <mark>evolving</mark> project</li>
+      </ul>
+  </section>
+
+  <section
+      data-documentation-link="https://github.com/angular/angular-cli/wiki/build">
+    <h2>Angular-cli build commands</h2>
+    <ul class="nobullet">
+      <li><mark>--prod</mark> flag to build in production mode</li>
+      <li><mark>--dev</mark> flag to build in dev mode</li>
+      <li><mark>--aot</mark> flag to use the Aot compilation</li>
+      <li>If the lazy loading routing is in place it will be package correctly</li>
+      <li><mark>--sourcemap</mark> output sourcemaps</li>
+    </ul>
+  </section>
+
+
+  <section
+      data-documentation-link="https://cli.angular.io/reference.pdf">
+    <h2>Custom from angular-cli</h2>
+    <ul class="nobullet">
+      <li>It is possible to <mark>go out</mark> from angular-cli</li>
+      <li>Use <mark>ng eject</mark></li>
+      <li>Custom the webpack config file <mark>extracted</mark></li>
+    </ul>
+  </section>
+
+</section>

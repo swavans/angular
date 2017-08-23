@@ -1,0 +1,23 @@
+<h4 *ngIf="!id">Add new contact</h4>
+<h4 *ngIf="id">Edit contact {{id}}</h4>
+
+<form [formGroup]="form" novalidate>
+  <div class="form-group" [class.has-danger]="!form.get('firstName').valid">
+    <label class="form-control-label" for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName"
+           formControlName="firstName"
+           (keyup.Enter)="save()">
+    <div *ngIf="!form.get('firstName').valid" class="form-control-feedback">First name is required</div>
+  </div>
+  <div class="form-group" [class.has-danger]="!form.get('lastName').valid">
+    <label class="form-control-label" for="lastName">Last Name</label>
+    <input type="text" class="form-control" id="lastName"
+           formControlName="lastName"
+           (keyup.Enter)="save()">
+    <div *ngIf="!form.get('lastName').valid" class="form-control-feedback">Last name is required</div>
+  </div>
+</form>
+
+<button type="button" class="btn btn-primary" (click)="save()" [disabled]="!form.valid">Save</button>
+<button type="button" class="btn btn-secondary" (click)="clear()">Clear</button>
+<button type="button" class="btn btn-secondary" (click)="goBack()">Cancel</button>
