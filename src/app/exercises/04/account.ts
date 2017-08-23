@@ -5,7 +5,7 @@ export class BankAccount {
   withdraw(amount: number) {
     if (this._balance > amount) {
       this._balance -= amount;
-    }
+    }else{ throw new Error('Not enough money');}
   }
 
   get balance() {

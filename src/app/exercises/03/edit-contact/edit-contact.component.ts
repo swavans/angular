@@ -8,7 +8,13 @@ import {Contact} from '../contact';
 export class EditContactComponent implements OnInit {
 
   // TODO: add missing inputs and outputs
+  // ex-start
+  @Input()
+  // ex-end
   contact: Contact;
+  // ex-start
+  @Output() save = new EventEmitter<Contact>();
+  // ex-end
 
   ngOnInit() {
     if (!this.contact) {
@@ -18,7 +24,7 @@ export class EditContactComponent implements OnInit {
 
   onSave() {
     if (this.isValid()) {
-      // TODO : handle the contact save
+      this.save.emit(Object.assign({}, this.contact));
       this.clear();
     }
   }

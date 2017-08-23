@@ -9,20 +9,22 @@
   </thead>
   <tbody>
   <!-- TODO: display a list of contacts using the tr below and ngFor -->
-  <tr>
+  <tr *ngFor="let contact of contacts">
     <th scope="row">
-      <!-- id -->
+      {{contact.id}}
     </th>
     <td>
-      <!-- first name -->
+      {{contact.firstName}}
     </td>
     <td>
-      <!-- last name -->
+      {{contact.lastName}}
     </td>
     <td>
       <!-- TODO: handle 'edit' and 'delete' using the buttons below -->
-      <button type="button" class="btn btn-sm btn-outline-success">Edit</button>
-      <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+      <button type="button" (click)="onEdit(contact)" class="btn btn-sm btn-outline-success">Edit</button>
+      <button type="button" (click)="onRemove(contact)" class="btn btn-sm btn-outline-danger">Delete</button>
+      <button type="button" (click)="onDuplicate(contact)" class="btn btn-sm btn-outline-info">Copy</button>
+      <button type="button" (click)="onDeleteAll(contact)" class="btn btn-sm btn-outline-danger">Delete All</button>
     </td>
   </tr>
   </tbody>

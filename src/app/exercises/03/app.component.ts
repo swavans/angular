@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {CONTACTS} from './contacts';
-import {Contact} from './contact';
+import { Component } from '@angular/core';
+import { CONTACTS } from './contacts';
+import { Contact } from './contact';
 
 @Component({
   templateUrl: 'app.component.html',
@@ -13,7 +13,7 @@ export class AppComponent {
   contacts: Contact[] = Array.from(CONTACTS);
 
   save(contact: Contact) {
-    if (contact.id) {
+    if (contact.id && this.contacts.find(x => x.id === contact.id)) {
       const index = this.contacts.findIndex(item => item.id === contact.id);
       this.contacts[index] = contact;
     } else {
@@ -24,5 +24,22 @@ export class AppComponent {
 
   remove(id: number) {
     this.contacts = this.contacts.filter(item => item.id !== id);
+  }
+
+  dall(name: string) {
+
+    console.log(name);
+  this.contacts.forEach(contac =>  {
+    if(contac.firstName+ contac.lastName===name){this.remove(contac.id);}
+  });
+
+  }
+
+  duplicate(contact: Contact) {
+
+    this.contacts.push({
+      ...contact,
+      id: this.counter++
+    });
   }
 }
